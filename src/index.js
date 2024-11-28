@@ -1,17 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { Provider } from "react-redux";
+import { store } from "./store";
+import Home from "./templates/Home";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+// Crear un tema personalizado (opcional)
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#1976d2", // Azul predeterminado de Material-UI
+    },
+    secondary: {
+      main: "#f50057", // Rosa predeterminado
+    },
+  },
+});
+
+ReactDOM.render(
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline /> {/* Reinicia los estilos básicos */}
+      <Home />
+    </ThemeProvider>
+  </Provider>,
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
