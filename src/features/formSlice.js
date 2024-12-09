@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   formData: {
-    nombre: "",
-    fechaNacimiento: "",
-    peso: "",
-    academia: "",
-    estatura: "",
-    categoria: "",
-    comprobante: null,
+    name: "",
+    birth_date: "",
+    weight: "",
+    academy: "",
+    height: "",
+    category: "",
+    payment_proof: null,
   },
 };
 

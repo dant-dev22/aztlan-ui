@@ -44,7 +44,7 @@ const Home = () => {
           </button>
         </div>
       )}
-      {view === "register" && <Form />}
+      {view === "register" && <Form onBack={() => handleViewChange("menu")} />}
       {view === "uploadProof" && <UploadProof onBack={() => handleViewChange("menu")} />}
     </div>
   );

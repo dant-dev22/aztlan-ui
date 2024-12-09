@@ -3,26 +3,20 @@ import ReactDOM from "react-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import Home from "./templates/Home";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Importar react-router-dom
+import AdminAztlan from "./templates/AdminAztlan";
 
-// Crear un tema personalizado (opcional)
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#1976d2", // Azul predeterminado de Material-UI
-    },
-    secondary: {
-      main: "#f50057", // Rosa predeterminado
-    },
-  },
-});
+import App from "./App"; // Importamos el componente App
 
 ReactDOM.render(
   <Provider store={store}>
-    <ThemeProvider theme={theme}>
       <CssBaseline /> {/* Reinicia los estilos básicos */}
-      <Home />
-    </ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/admin-aztlan" element={<AdminAztlan />} />
+        </Routes>
+      </Router>
   </Provider>,
   document.getElementById("root")
 );
