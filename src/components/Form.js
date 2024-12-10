@@ -10,6 +10,7 @@ const Form = ({ onBack }) => {
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [aztlanID, setAztlanID] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,10 +50,10 @@ const Form = ({ onBack }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Formulario enviado con éxito:", data);
+        setAztlanID(data.aztlan_id)
         dispatch(resetForm());
-        setSuccess(true); // Mostrar mensaje de éxito
-        setError(null); // Limpiar el error si hay éxito
+        setSuccess(true);
+        setError(null);
       } else {
         setError("Error al enviar los datos, inténtalo de nuevo.");
       }
@@ -67,6 +68,7 @@ const Form = ({ onBack }) => {
       {success ? ( 
         <SuccessForm
           onBack={onBack}
+          aztlanID={aztlanID}
         />
       ) : (
         <RegistrationForm

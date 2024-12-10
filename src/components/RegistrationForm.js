@@ -14,6 +14,7 @@ const inputStyles = {
     },
 };
 
+
 const RegistrationForm = ({ formData, handleChange, error, success, handleSubmit, onBack }) => {
   return (
     <Box
