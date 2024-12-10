@@ -11,7 +11,7 @@ const Home = () => {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h1 style={{ textAlign: "center" }}>Torneo de BJJ - Registro</h1>
+      <h1 style={{ textAlign: "center" }}>Aztlan Grappling 2025</h1>
       {view === "menu" && (
         <div style={{ textAlign: "center" }}>
           <button

@@ -11,6 +11,7 @@ const initialState = {
     comprobante: null,
   },
 };
+// traducir esto
 
 const formSlice = createSlice({
   name: "form",

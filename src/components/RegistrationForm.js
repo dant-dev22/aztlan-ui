@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
+import { Box, Typography, Grid, TextField, Button } from '@mui/material';
 const inputStyles = {
     backgroundColor: "white", // Fondo blanco
     borderColor: "#FF6F00", // Contorno naranja
@@ -15,8 +15,6 @@ const inputStyles = {
 };
 
 const RegistrationForm = ({ formData, handleChange, error, success, handleSubmit, onBack }) => {
-  console.log(success,"soy success")
-  console.log(formData,"soy formdata")
   return (
     <Box
       component="form"
@@ -31,18 +29,12 @@ const RegistrationForm = ({ formData, handleChange, error, success, handleSubmit
       }}
     >
       <Typography variant="h4" align="center" gutterBottom>
-        Registro para Torneo BJJ
+        Registro Aztlan Grappling Feb-2025 
       </Typography>
 
       {error && (
         <Typography color="error" variant="body2" align="center" gutterBottom>
           {error}
-        </Typography>
-      )}
-
-      {success && (
-        <Typography color="success" variant="body2" align="center" gutterBottom>
-          Registro realizado con éxito.
         </Typography>
       )}
 
@@ -63,7 +55,7 @@ const RegistrationForm = ({ formData, handleChange, error, success, handleSubmit
         <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Peso"
+              label="Peso(kg)"
               name="weight"
               type="number"
               value={formData.weight}
@@ -93,6 +85,21 @@ const RegistrationForm = ({ formData, handleChange, error, success, handleSubmit
           <Grid item xs={12}>
             <TextField
               fullWidth
+              label="Fecha de Nacimiento"
+              name="birth_date"
+              type="date"
+              value={formData.birth_date}
+              onChange={handleChange}
+              error={!!error?.birth_date}
+              helperText={error?.birth_date}
+              InputLabelProps={{ shrink: true }}
+              sx={inputStyles}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
               label="Estatura"
               name="height"
               type="number"
@@ -105,20 +112,6 @@ const RegistrationForm = ({ formData, handleChange, error, success, handleSubmit
             />
         </Grid>
 
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Fecha de Nacimiento"
-            name="birth_date"
-            type="date"
-            value={formData.birth_date}
-            onChange={handleChange}
-            error={!!error?.birth_date}
-            helperText={error?.birth_date}
-            InputLabelProps={{ shrink: true }}
-            sx={inputStyles}
-          />
-        </Grid>
 
         <Grid item xs={12}>
             <TextField
