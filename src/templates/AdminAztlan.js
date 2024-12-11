@@ -1,56 +1,65 @@
-import React, { useState } from 'react';
-import { Button, Container, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container } from '@mui/material';
+import ParticipantsTable from '../components/ParticipantsTable';
 
 function AdminAztlan() {
   const [participants, setParticipants] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleDownload = async () => {
+  const fetchParticipants = async () => {
     try {
-      // Hacemos la solicitud GET a la API para obtener todos los participantes
       const response = await fetch('http://localhost:8000/participants');
       if (!response.ok) {
         throw new Error('Error al obtener los participantes');
       }
 
       const data = await response.json();
-      setParticipants(data); // Guardamos los participantes en el estado
+      setParticipants(data);
+    } catch (error) {
+      console.error('Error al obtener los participantes:', error);
+    }
+  };
 
-      console.log('Participantes:', data); // Puedes hacer lo que necesites con los datos
+  const downloadCSV = () => {
+    try {
+      const csvData = participants.map(participant =>
+        `${participant.id}, ${participant.weight},${participant.name},${participant.category},${participant.academy},${participant.birth_date},${participant.aztlan_id},${participant.is_payment_complete}`
+      ).join('\n');
 
-      const csvData = data.map(participant => `${participant.id}, ${participant.weight},${participant.name},${participant.category},${participant.academy},${participant.birth_date},${participant.aztlan_id},${participant.is_payment_complete}`).join('\n');
       const blob = new Blob([csvData], { type: 'text/csv' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = 'participantes.csv';
       link.click();
     } catch (error) {
-      console.error('Error al descargar los registrados:', error);
+      console.error('Error al generar el archivo CSV:', error);
     }
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); 
+  };
+
+  useEffect(() => {
+    fetchParticipants();
+  }, []);
+
   return (
-    <Container
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-      }}
-    >
-      <section>
-        <Typography variant="h4" gutterBottom align="center">
-          Admin Aztlan
-        </Typography>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          fullWidth
-          onClick={handleDownload} // Llamamos a la función handleDownload
-        >
-          Descargar Registrados
-        </Button>
-        {/* Puedes agregar más botones o contenido aquí según sea necesario */}
-      </section>
+    <Container>
+      <ParticipantsTable 
+        participants={participants} 
+        page={page} 
+        rowsPerPage={rowsPerPage} 
+        downloadCSV={downloadCSV} 
+        handleChangePage={handleChangePage} 
+        handleChangeRowsPerPage={handleChangeRowsPerPage} 
+      />
     </Container>
   );
 }
