@@ -1,21 +1,21 @@
 import React from 'react';
-import { Box, Typography, Grid, TextField, Button } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
+import FormFields from './FormFields';
 const inputStyles = {
     backgroundColor: "white", // Fondo blanco
     borderColor: "#FF6F00", // Contorno naranja
-    "& .MuiInputLabel-root": { color: "#FF6F00" }, // Color de la etiqueta en naranja
+    "& .MuiInputLabel-root": { color: "#FF6F00" },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        borderColor: "#FF6F00", // Color de borde del campo
+        borderColor: "#FF6F00",
       },
       "&:hover fieldset": {
-        borderColor: "#FF6F00", // Color de borde al hacer hover
+        borderColor: "#FF6F00",
       },
     },
 };
 
-
-const RegistrationForm = ({ formData, handleChange, error, success, handleSubmit, onBack }) => {
+const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack }) => {
   return (
     <Box
       component="form"
@@ -39,107 +39,21 @@ const RegistrationForm = ({ formData, handleChange, error, success, handleSubmit
         </Typography>
       )}
 
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Nombre"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            error={!!error?.name}
-            helperText={error?.name}
-            variant="outlined"
-            sx={inputStyles}
-          />
-        </Grid>
-        <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Peso(kg)"
-              name="weight"
-              type="number"
-              value={formData.weight}
-              onChange={handleChange}
-              error={!!error?.weight}
-              helperText={error?.weight}
-              variant="outlined"
-              sx={inputStyles}
-            />
-          </Grid>
+      <FormFields
+        formData={formData}
+        handleChange={handleChange}
+        error={error}
+        inputStyles={inputStyles}
+      />
 
-          {/* Campo de Academia */}
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Academia"
-              name="academy"
-              value={formData.academy}
-              onChange={handleChange}
-              error={!!error?.academy}
-              helperText={error?.academy}
-              variant="outlined"
-              sx={inputStyles}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Fecha de Nacimiento"
-              name="birth_date"
-              type="date"
-              value={formData.birth_date}
-              onChange={handleChange}
-              error={!!error?.birth_date}
-              helperText={error?.birth_date}
-              InputLabelProps={{ shrink: true }}
-              sx={inputStyles}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Estatura"
-              name="height"
-              type="number"
-              value={formData.height}
-              onChange={handleChange}
-              error={!!error?.height}
-              helperText={error?.height}
-              variant="outlined"
-              sx={inputStyles}
-            />
-        </Grid>
-
-
-        <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Categoria(Años entrenando)"
-              name="category"
-              type="number"
-              value={formData.category}
-              onChange={handleChange}
-              error={!!error?.category}
-              helperText={error?.category}
-              variant="outlined"
-              sx={inputStyles}
-            />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-            <Button type="submit" variant="contained" color="primary">
-              Enviar
-            </Button>
-            <Button type="button" onClick={onBack} variant="contained" color="secondary">
-              Volver
-            </Button>
-          </Box>
-        </Grid>
-      </Grid>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem", marginTop: 2 }}>
+        <Button type="submit" variant="contained" color="primary">
+          Enviar
+        </Button>
+        <Button type="button" onClick={onBack} variant="contained" color="secondary">
+          Volver
+        </Button>
+      </Box>
     </Box>
   );
 };
