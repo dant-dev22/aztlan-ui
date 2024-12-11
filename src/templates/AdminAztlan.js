@@ -59,6 +59,7 @@ function AdminAztlan() {
         downloadCSV={downloadCSV} 
         handleChangePage={handleChangePage} 
         handleChangeRowsPerPage={handleChangeRowsPerPage} 
+        setParticipants={setParticipants}
       />
     </Container>
   );
