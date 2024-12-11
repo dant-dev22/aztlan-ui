@@ -1,6 +1,22 @@
 import React from 'react';
 import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper } from '@mui/material';
 
+// Función para calcular la edad a partir de la fecha de nacimiento
+const calculateAge = (birthDate) => {
+  const birthDateObj = new Date(birthDate);
+  const today = new Date();
+  let age = today.getFullYear() - birthDateObj.getFullYear();
+  const month = today.getMonth();
+  const day = today.getDate();
+
+  // Ajustar la edad si aún no ha cumplido años este año
+  if (month < birthDateObj.getMonth() || (month === birthDateObj.getMonth() && day < birthDateObj.getDate())) {
+    age--;
+  }
+
+  return age;
+};
+
 const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handleChangePage, handleChangeRowsPerPage }) => {
   return (
     <Container
@@ -33,6 +49,7 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
               <TableCell>Categoría</TableCell>
               <TableCell>Aztlan ID</TableCell>
               <TableCell>Pago Completo</TableCell>
+              <TableCell>Edad</TableCell> {/* Nueva columna para la edad */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -43,13 +60,13 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
                 <TableCell>{participant.category}</TableCell>
                 <TableCell>{participant.aztlan_id}</TableCell>
                 <TableCell>{participant.is_payment_complete ? 'Sí' : 'No'}</TableCell>
+                <TableCell>{calculateAge(participant.birth_date)} años</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* Paginación */}
       <TablePagination
         rowsPerPageOptions={[10, 25, 50]}
         component="div"
