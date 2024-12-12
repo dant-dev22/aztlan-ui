@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Importar react-router-dom

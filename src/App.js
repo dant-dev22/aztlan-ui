@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Routes, Route } from 'react-router-dom'; // Importar Routes y Route
+import { Routes, Route } from 'react-router-dom'; // Importar Routes y Route
 import './App.css'; // Importar los estilos CSS
 import Home from './templates/Home'; // Componente Home
 import AdminAztlan from './templates/AdminAztlan';
