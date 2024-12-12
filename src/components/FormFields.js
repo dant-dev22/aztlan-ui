@@ -50,6 +50,21 @@ const FormFields = ({ formData, handleChange, error, inputStyles }) => {
       <Grid item xs={12}>
         <TextField
           fullWidth
+          label="Correo Electrónico"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          error={!!error?.email}
+          helperText={error?.email}
+          variant="outlined"
+          sx={inputStyles}
+        />
+      </Grid>
+
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
           label="Fecha de Nacimiento"
           name="birth_date"
           type="date"

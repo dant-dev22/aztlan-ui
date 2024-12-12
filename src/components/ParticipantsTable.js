@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper } from '@mui/material';
 import axios from 'axios';  // Importar axios para hacer solicitudes HTTP
 
@@ -17,10 +17,33 @@ const calculateAge = (birthDate) => {
 };
 
 const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handleChangePage, handleChangeRowsPerPage, setParticipants }) => {
+  const [paymentProofs, setPaymentProofs] = useState({});
+  console.log(paymentProofs, "soy los payment proofs")
+
+  const fetchPaymentProof = async (aztlanId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/participants/${aztlanId}/payment-proof`);
+      if (response.ok) {
+        const data = await response.json();
+        setPaymentProofs((prev) => ({
+          ...prev,
+          [aztlanId]: data.payment_proof,
+        }));
+      }
+    } catch (error) {
+      console.error('Error al obtener el comprobante de pago:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch de los comprobantes de pago de todos los participantes
+    participants.forEach((participant) => {
+      fetchPaymentProof(participant.aztlan_id);
+    });
+  }, [participants]);
 
   const handleDelete = async (participantId) => {
     try {
-      console.log(participantId, "linea 27")
       await axios.delete(`http://localhost:8000/participants/${participantId}`);
       
       setParticipants(prevParticipants => prevParticipants.filter(participant => participant.id !== participantId));
@@ -63,8 +86,9 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
               <TableCell>Categoría</TableCell>
               <TableCell>Aztlan ID</TableCell>
               <TableCell>Pago Completo</TableCell>
-              <TableCell>Edad</TableCell> {/* Nueva columna para la edad */}
-              <TableCell>Acciones</TableCell> {/* Nueva columna para el botón eliminar */}
+              <TableCell>Edad</TableCell>
+              <TableCell>Comprobante</TableCell>
+              <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -77,7 +101,19 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
                 <TableCell>{participant.is_payment_complete ? 'Sí' : 'No'}</TableCell>
                 <TableCell>{calculateAge(participant.birth_date)} años</TableCell>
                 <TableCell>
-                  {/* Botón de eliminar */}
+                  {paymentProofs[participant.aztlan_id] ? (
+                    <a
+                      href={`http://localhost:8000/${paymentProofs[participant.aztlan_id]}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Comprobante de pago
+                    </a>
+                  ) : (
+                    'No disponible'
+                  )}
+                </TableCell>                
+                <TableCell>
                   <Button 
                     variant="outlined" 
                     color="secondary" 
