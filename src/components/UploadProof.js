@@ -1,19 +1,25 @@
 import React, { useState } from "react";
-import axios from "axios"; // Para manejar las solicitudes HTTP
+import axios from "axios";
+import {
+  Button,
+  Container,
+  Typography,
+  TextField,
+  Box,
+  Alert,
+} from "@mui/material";
 
 const UploadProof = ({ onBack }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // Para manejar errores
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Resetear el mensaje de error
+    setErrorMessage("");
 
-    // Obtener los datos del formulario
     const formData = new FormData(e.target);
     const participantId = formData.get("id");
     const proofFile = formData.get("proof");
-    console.log(proofFile, "soy el prooffile")
 
     if (!participantId || !proofFile) {
       setErrorMessage("Todos los campos son obligatorios.");
@@ -21,14 +27,11 @@ const UploadProof = ({ onBack }) => {
     }
 
     try {
-      // Crear un FormData para enviar el archivo
       const data = new FormData();
       data.append("file", proofFile);
-      console.log(data, "soy la data que se envía")
 
-      // Hacer la solicitud al backend
       await axios.post(
-        `http://127.0.0.1:8000/participants/${participantId}/upload`, // Reemplaza con tu URL base si es diferente
+        `http://127.0.0.1:8000/participants/${participantId}/upload`,
         data,
         {
           headers: {
@@ -39,7 +42,7 @@ const UploadProof = ({ onBack }) => {
 
       setIsSubmitted(true);
     } catch (error) {
-      console.error("soy el error", error.response);
+      console.error(error.response);
       setErrorMessage(
         error.response?.data?.detail || "Ocurrió un error al subir el comprobante."
       );
@@ -47,77 +50,77 @@ const UploadProof = ({ onBack }) => {
   };
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
+    <Container maxWidth="sm" sx={{ padding: "2rem", textAlign: "center", backgroundColor: "#a1a1a0"}}>
       {isSubmitted ? (
-        <p style={{ color: "green", fontSize: "1.2rem" }}>Tu comprobante ha sido enviado</p>
+        <Typography variant="h6" sx={{ color: "green" }}>
+          Tu comprobante ha sido enviado
+        </Typography>
       ) : (
-        <form onSubmit={handleSubmit} style={{ display: "inline-block", textAlign: "left" }}>
-          <div style={{ marginBottom: "1rem" }}>
-            <label htmlFor="id" style={{ display: "block", marginBottom: "0.5rem" }}>
-              ID de Registro:
-            </label>
-            <input
-              type="text"
-              id="id"
-              name="id"
-              style={{
-                padding: "0.5rem",
-                width: "100%",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
+        <form onSubmit={handleSubmit}>
+          <Box sx={{ marginBottom: "1rem" }}>
+          <TextField
+            fullWidth
+            label="ID de Registro"
+            name="id"
+            variant="outlined"
+            required
+            sx={{
+              borderColor: "#595959",
+              '&:hover .MuiOutlinedInput-root': {
+                backgroundColor: "#b5b5b4",
+              },
+            }}
+          />
+          </Box>
+          <Box sx={{ marginBottom: "1rem" }}>
+            <Button
+              variant="outlined"
+              component="label"
+              fullWidth
+              sx={{
+                padding: "0.75rem",
+                border: "2px dashed #ccc",
+                borderRadius: "8px",
+                textTransform: "none",
+                fontSize: "1rem",
+                color: "#555",
+                '&:hover': {
+                  backgroundColor: "#b5b5b4",
+                },
               }}
-              required
-            />
-          </div>
-          <div style={{ marginBottom: "1rem" }}>
-            <label htmlFor="proof" style={{ display: "block", marginBottom: "0.5rem" }}>
-              Subir Comprobante:
-            </label>
-            <input
-              type="file"
-              id="proof"
-              name="proof"
-              style={{ padding: "0.5rem", width: "100%" }}
-              accept=".jpg,.jpeg,.png" // Validación de formatos aceptados
-              required
-            />
-          </div>
+            >
+              Subir Comprobante
+              <input
+                type="file"
+                id="proof"
+                name="proof"
+                accept=".jpg,.jpeg,.png"
+                hidden
+                required
+              />
+            </Button>
+          </Box>
           {errorMessage && (
-            <p style={{ color: "red", fontSize: "0.9rem", marginBottom: "1rem" }}>
+            <Alert severity="error" sx={{ marginBottom: "1rem" }}>
               {errorMessage}
-            </p>
+            </Alert>
           )}
-          <button
-            type="submit"
-            style={{
-              padding: "0.75rem 1.5rem",
-              backgroundColor: "#1976d2",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          >
-            Enviar
-          </button>
-          <button
-            type="button"
-            onClick={onBack}
-            style={{
-              padding: "0.75rem 1.5rem",
-              marginLeft: "1rem",
-              backgroundColor: "#f50057",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          >
-            Volver
-          </button>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+            <Button type="submit" variant="contained" sx={{ backgroundColor: "#FF5722"}}>
+              Enviar
+            </Button>
+            <Button
+              type="button"
+              variant="contained"
+              color="secondary"
+              onClick={onBack}
+            >
+              Volver
+            </Button>
+          </Box>
         </form>
       )}
-    </div>
+    </Container>
   );
 };
 

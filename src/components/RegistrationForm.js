@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import FormFields from './FormFields';
+
 const inputStyles = {
-    backgroundColor: "white", // Fondo blanco
-    borderColor: "#FF6F00", // Contorno naranja
-    "& .MuiInputLabel-root": { color: "#FF6F00" },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "#FF6F00",
-      },
-      "&:hover fieldset": {
-        borderColor: "#FF6F00",
-      },
+  backgroundColor: "#D3D3D3", // Fondo blanco
+  borderColor: "#4f4f4f", // Contorno naranja
+  "& .MuiInputLabel-root": { color: "#4f4f4f" },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#595959",
     },
+    "&:hover fieldset": {
+      borderColor: "#595959",
+    },
+  },
+};
+
+const buttonStyles = {
+  backgroundColor: "#FFC107",
 };
 
 const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Este efecto hará que el formulario aparezca después de 100ms.
+    setIsVisible(true);
+  }, []);
+
   return (
     <Box
       component="form"
@@ -26,11 +38,14 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
         padding: 2,
         border: "1px solid #ddd",
         borderRadius: 2,
+        backgroundColor: "#a1a1a0",
         boxShadow: 2,
+        opacity: isVisible ? 1 : 0,
+        transition: "opacity 0.5s ease-in-out",
       }}
     >
       <Typography variant="h4" align="center" gutterBottom>
-        Registro Aztlan Grappling Feb-2025 
+        Registro Torneo Feb-2025
       </Typography>
 
       {error && (
@@ -47,10 +62,10 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
       />
 
       <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem", marginTop: 2 }}>
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" sx={{ backgroundColor: "#FF5722" }}>
           Enviar
         </Button>
-        <Button type="button" onClick={onBack} variant="contained" color="secondary">
+        <Button type="button" onClick={onBack} variant="contained" sx={buttonStyles}>
           Volver
         </Button>
       </Box>

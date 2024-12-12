@@ -95,7 +95,7 @@ const FormFields = ({ formData, handleChange, error, inputStyles }) => {
       <Grid item xs={12}>
         <TextField
           fullWidth
-          label="Categoria(Años entrenando)"
+          label="Años entrenando"
           name="category"
           type="number"
           value={formData.category}

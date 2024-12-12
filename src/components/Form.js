@@ -45,6 +45,7 @@ const Form = ({ onBack }) => {
           academy: formData.academy,
           height: formData.height,
           category: formData.category,
+          email: formData.email,
         }),
       });
 

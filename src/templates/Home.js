@@ -10,15 +10,15 @@ const Home = () => {
   };
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h1 style={{ textAlign: "center" }}>Aztlan Grappling 2025</h1>
+    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", transition: "opacity 0.5s ease-in-out", }}>
+      <h1 style={{ textAlign: "center", color:"white" }}>Aztlan Grappling 2025</h1>
       {view === "menu" && (
         <div style={{ textAlign: "center" }}>
           <button
             style={{
               padding: "1rem 2rem",
               margin: "1rem",
-              backgroundColor: "#1976d2",
+              backgroundColor: "#FF5722",
               color: "white",
               border: "none",
               borderRadius: "4px",
@@ -32,7 +32,7 @@ const Home = () => {
             style={{
               padding: "1rem 2rem",
               margin: "1rem",
-              backgroundColor: "#f50057",
+              backgroundColor: "#FFC107",
               color: "white",
               border: "none",
               borderRadius: "4px",
