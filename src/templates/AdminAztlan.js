@@ -80,7 +80,6 @@ function AdminAztlan() {
 
   return (
     <Container>
-      {/* Cuadro de búsqueda */}
       <TextField
         label="Buscar por nombre"
         variant="outlined"
