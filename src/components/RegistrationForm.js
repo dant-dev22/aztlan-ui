@@ -3,7 +3,7 @@ import { Box, Typography, Button } from '@mui/material';
 import FormFields from './FormFields';
 
 const inputStyles = {
-  backgroundColor: "#D3D3D3", // Fondo blanco
+  backgroundColor: "#F5F5F5", // Fondo blanco
   borderColor: "#4f4f4f", // Contorno naranja
   "& .MuiInputLabel-root": { color: "#4f4f4f" },
   "& .MuiOutlinedInput-root": {
@@ -38,7 +38,7 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
         padding: 2,
         border: "1px solid #ddd",
         borderRadius: 2,
-        backgroundColor: "#a1a1a0",
+        backgroundColor: "#D6D6D6",
         boxShadow: 2,
         opacity: isVisible ? 1 : 0,
         transition: "opacity 0.5s ease-in-out",
