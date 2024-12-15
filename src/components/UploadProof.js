@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Button,
@@ -12,10 +12,35 @@ import {
 const UploadProof = ({ onBack }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [fileError, setFileError] = useState("");
+  const [isVisible, setIsVisible] = useState(false); // Nuevo estado para el fade-in
+
+  useEffect(() => {
+    setIsVisible(true); // Activar fade-in cuando el componente se monta
+  }, []);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const validFormats = ["image/jpeg", "image/jpg"];
+      const maxSize = 6 * 1024 * 1024; // 6MB
+
+      if (!validFormats.includes(file.type)) {
+        setFileError("El archivo debe ser en formato JPG o JPEG.");
+        e.target.value = ""; // Reseteamos el input
+      } else if (file.size > maxSize) {
+        setFileError("El archivo no puede ser mayor a 6MB.");
+        e.target.value = ""; // Reseteamos el input
+      } else {
+        setFileError(""); // Si todo está bien, limpiamos el error
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+    setFileError(""); // Limpiar cualquier error previo en archivo
 
     const formData = new FormData(e.target);
     const participantId = formData.get("id");
@@ -50,7 +75,16 @@ const UploadProof = ({ onBack }) => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ padding: "2rem", textAlign: "center", backgroundColor: "#a1a1a0"}}>
+    <Container
+      maxWidth="sm"
+      sx={{
+        padding: "2rem",
+        textAlign: "center",
+        backgroundColor: "#D6D6D6",
+        opacity: isVisible ? 1 : 0, // Aparece lentamente
+        transition: "opacity 1s ease-in", // Transición de fade-in
+      }}
+    >
       {isSubmitted ? (
         <Typography variant="h6" sx={{ color: "green" }}>
           Tu comprobante ha sido enviado
@@ -58,20 +92,25 @@ const UploadProof = ({ onBack }) => {
       ) : (
         <form onSubmit={handleSubmit}>
           <Box sx={{ marginBottom: "1rem" }}>
-          <TextField
-            fullWidth
-            label="ID de Registro"
-            name="id"
-            variant="outlined"
-            required
-            sx={{
-              borderColor: "#595959",
-              '&:hover .MuiOutlinedInput-root': {
-                backgroundColor: "#b5b5b4",
-              },
-            }}
-          />
+            <TextField
+              fullWidth
+              label="ID de Registro"
+              name="id"
+              variant="outlined"
+              required
+              sx={{
+                backgroundColor: "white",
+                borderColor: "#595959",
+              }}
+            />
           </Box>
+
+          <Box sx={{ marginBottom: "1rem", color: "black", fontSize: "1.0rem" }}>
+            <Typography>
+              El comprobante debe ser una imagen en formato JPG o JPEG, y no mayor a 6MB.
+            </Typography>
+          </Box>
+
           <Box sx={{ marginBottom: "1rem" }}>
             <Button
               variant="outlined"
@@ -83,36 +122,45 @@ const UploadProof = ({ onBack }) => {
                 borderRadius: "8px",
                 textTransform: "none",
                 fontSize: "1rem",
+                backgroundColor: "#FFE0B2",
                 color: "#555",
                 '&:hover': {
-                  backgroundColor: "#b5b5b4",
+                  backgroundColor: "#FFCC80",
                 },
               }}
             >
-              Subir Comprobante
+              Subir comprobante
               <input
                 type="file"
                 id="proof"
                 name="proof"
-                accept=".jpg,.jpeg,.png"
+                accept=".jpg,.jpeg"
                 hidden
                 required
+                onChange={handleFileChange} // Añadir validación del archivo
               />
             </Button>
+            {fileError && (
+              <Alert severity="error" sx={{ marginTop: "1rem" }}>
+                {fileError}
+              </Alert>
+            )}
           </Box>
+
           {errorMessage && (
             <Alert severity="error" sx={{ marginBottom: "1rem" }}>
               {errorMessage}
             </Alert>
           )}
+
           <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-            <Button type="submit" variant="contained" sx={{ backgroundColor: "#FF5722"}}>
+            <Button type="submit" variant="contained" sx={{ backgroundColor: "#FF5722" }}>
               Enviar
             </Button>
             <Button
               type="button"
               variant="contained"
-              color="secondary"
+              sx={{ backgroundColor: "#FFC107" }}
               onClick={onBack}
             >
               Volver
