@@ -24,8 +24,10 @@ const Form = ({ onBack }) => {
     return true;
   };
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const API_URL = "https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws";
 
     if (!validateForm()) {
       setError("Por favor, completa todos los campos.");
@@ -33,7 +35,7 @@ const Form = ({ onBack }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/participants/", {
+      const response = await fetch(`${API_URL}/participants`, { // Usamos la variable API_URL
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,30 +47,32 @@ const Form = ({ onBack }) => {
           academy: formData.academy,
           height: formData.height,
           category: formData.category,
+          payment_proof: formData.payment_proof || "", // Campo extra con valor nulo por defecto
           email: formData.email,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        setAztlanID(data.aztlan_id)
+        setAztlanID(data.aztlan_id);
         dispatch(resetForm());
         setSuccess(true);
         setError(null);
       } else {
-        setError("Error al enviar los datos, inténtalo de nuevo.");
+        const errorData = await response.json();
+        setError(errorData.error || "Error al enviar los datos, inténtalo de nuevo.");
       }
     } catch (error) {
       setError("Error al enviar los datos, inténtalo de nuevo.");
       console.error("Error al enviar los datos:", error);
     }
   };
+ 
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
       {success ? ( 
         <SuccessForm
-          onBack={onBack}
           aztlanID={aztlanID}
         />
       ) : (
