@@ -22,12 +22,12 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
 
   const fetchPaymentProof = async (aztlanId) => {
     try {
-      const response = await fetch(`http://localhost:8000/participants/${aztlanId}/payment-proof`);
+      const response = await fetch(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${aztlanId}/payment-proof-url`);
       if (response.ok) {
         const data = await response.json();
         setPaymentProofs((prev) => ({
           ...prev,
-          [aztlanId]: data.payment_proof,
+          [aztlanId]: data.payment_proof_url,
         }));
       }
     } catch (error) {
@@ -44,11 +44,15 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
 
   const handleDelete = async (participantId) => {
     try {
-      await axios.delete(`http://localhost:8000/participants/${participantId}`);
+      // Cambiar la URL al nuevo endpoint
+      const response = await axios.delete(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${participantId}`);
       
-      setParticipants(prevParticipants => prevParticipants.filter(participant => participant.id !== participantId));
-
-      alert('Participante eliminado con éxito.');
+      if (response.status === 200) {
+        setParticipants(prevParticipants => prevParticipants.filter(participant => participant.aztlan_id !== participantId));
+        alert('Participante eliminado con éxito.');
+      } else {
+        alert('Hubo un error al eliminar el participante.');
+      }
     } catch (error) {
       console.error('Error al eliminar el participante:', error);
       alert('Hubo un error al eliminar el participante.');
@@ -103,7 +107,7 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
                 <TableCell>
                   {paymentProofs[participant.aztlan_id] ? (
                     <a
-                      href={`http://localhost:8000/${paymentProofs[participant.aztlan_id]}`}
+                      href={paymentProofs[participant.aztlan_id]}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -117,7 +121,7 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
                   <Button 
                     variant="outlined" 
                     color="secondary" 
-                    onClick={() => handleDelete(participant.id)}
+                    onClick={() => handleDelete(participant.aztlan_id)}
                   >
                     Eliminar
                   </Button>
