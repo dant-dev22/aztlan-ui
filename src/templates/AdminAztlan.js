@@ -30,6 +30,7 @@ function AdminAztlan() {
   const downloadCSV = () => {
     setLoading(true); // Activar el loading cuando se esté generando el CSV
     try {
+      console.log(participants, "linea 33")
       const csvData = participants.map(participant =>
         `${participant.id}, ${participant.weight},${participant.name},${participant.category},${participant.academy},${participant.birth_date},${participant.aztlan_id},${participant.is_payment_complete}`
       ).join('\n');
