@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateField, resetForm } from "../features/formSlice";
 import RegistrationForm from "./RegistrationForm";
 import SuccessForm from "./SuccessForm";
+import CircularProgress from '@mui/material/CircularProgress'; // Importar el spinner
 
 const Form = ({ onBack }) => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const Form = ({ onBack }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [aztlanID, setAztlanID] = useState('');
+  const [loading, setLoading] = useState(false); // Estado de carga
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +26,7 @@ const Form = ({ onBack }) => {
     return true;
   };
 
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const API_URL = "https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws";
@@ -33,6 +35,8 @@ const Form = ({ onBack }) => {
       setError("Por favor, completa todos los campos.");
       return;
     }
+
+    setLoading(true); // Activar el spinner
 
     try {
       const response = await fetch(`${API_URL}/participants`, { // Usamos la variable API_URL
@@ -52,6 +56,8 @@ const Form = ({ onBack }) => {
         }),
       });
 
+      setLoading(false); // Desactivar el spinner
+
       if (response.ok) {
         const data = await response.json();
         setAztlanID(data.aztlan_id);
@@ -63,15 +69,17 @@ const Form = ({ onBack }) => {
         setError(errorData.error || "Error al enviar los datos, inténtalo de nuevo.");
       }
     } catch (error) {
+      setLoading(false); // Desactivar el spinner
       setError("Error al enviar los datos, inténtalo de nuevo.");
       console.error("Error al enviar los datos:", error);
     }
   };
- 
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", textAlign: "center" }}>
-      {success ? ( 
+      {loading ? (
+        <CircularProgress size={50} /> // Mostrar el spinner cuando esté cargando
+      ) : success ? ( 
         <SuccessForm
           aztlanID={aztlanID}
         />
