@@ -107,14 +107,14 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
 
   return (
     <Container>
-      {/* Tabla */}
       <TableContainer component={Paper}>
         <Table aria-label="participantes">
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Nombre</TableCell>
-              <TableCell>Categoría</TableCell>
+              <TableCell>Años entrenando</TableCell>
+              <TableCell>Academia</TableCell>
               <TableCell>Aztlan ID</TableCell>
               <TableCell>Pago Completo</TableCell>
               <TableCell>Edad</TableCell>
@@ -128,6 +128,7 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
                 <TableCell>{participant.id}</TableCell>
                 <TableCell>{participant.name}</TableCell>
                 <TableCell>{participant.category}</TableCell>
+                <TableCell>{participant.academy}</TableCell>
                 <TableCell>{participant.aztlan_id}</TableCell>
                 <TableCell>
                   <Switch
