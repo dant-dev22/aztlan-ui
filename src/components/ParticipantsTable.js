@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Switch } from '@mui/material';
-import axios from 'axios';  // Importar axios para hacer solicitudes HTTP
+import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import axios from 'axios';
 
 const calculateAge = (birthDate) => {
   const birthDateObj = new Date(birthDate);
@@ -19,8 +19,9 @@ const calculateAge = (birthDate) => {
 const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handleChangePage, handleChangeRowsPerPage, setParticipants }) => {
   const [paymentProofs, setPaymentProofs] = useState({});
   const [paymentStatus, setPaymentStatus] = useState({});
+  const [openModal, setOpenModal] = useState(false);  // Estado para controlar el modal
+  const [selectedParticipant, setSelectedParticipant] = useState(null); // Participante seleccionado para la actualización
 
-  // Fetch del comprobante de pago
   const fetchPaymentProof = async (aztlanId) => {
     try {
       const response = await fetch(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${aztlanId}/payment-proof-url`);
@@ -61,10 +62,21 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
     }
   };
 
-  // Manejar el cambio del switch
-  const handleSwitchChange = (event, aztlanId) => {
-    const isPaymentComplete = event.target.checked ? 1 : 0;
-    updatePaymentStatus(aztlanId, isPaymentComplete);
+  const handleSwitchChange = (event, participant) => {
+    setSelectedParticipant(participant); 
+    setOpenModal(true); 
+  };
+
+  const handleConfirmUpdate = () => {
+    const isPaymentComplete = selectedParticipant.is_payment_complete === 1 ? 0 : 1;
+    updatePaymentStatus(selectedParticipant.aztlan_id, isPaymentComplete);
+    setOpenModal(false);
+  };
+
+  
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   const handleDelete = async (participantId) => {
@@ -127,12 +139,13 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
                 <TableCell>{participant.aztlan_id}</TableCell>
                 <TableCell>
                   <Switch
-                    checked={paymentStatus[participant.aztlan_id] === 1 || participant.is_payment_complete}
-                    onChange={(event) => handleSwitchChange(event, participant.aztlan_id)}
+                    checked={participant.is_payment_complete === 1}
+                    onChange={(event) => handleSwitchChange(event, participant)}
                     name="paymentStatus"
                     inputProps={{ 'aria-label': 'payment status switch' }}
                   />
                 </TableCell>
+ 
                 <TableCell>{calculateAge(participant.birth_date)} años</TableCell>
                 <TableCell>
                   {paymentProofs[participant.aztlan_id] ? (
@@ -171,6 +184,26 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+
+      <Dialog
+        open={openModal}
+        onClose={handleCloseModal}
+      >
+        <DialogTitle>Confirmar actualización</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            ¿Estás seguro de que deseas actualizar el estado de pago para el participante?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="secondary">
+            No
+          </Button>
+          <Button onClick={handleConfirmUpdate} color="primary">
+            Sí
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
