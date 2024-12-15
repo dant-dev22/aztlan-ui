@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper } from '@mui/material';
+import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Switch } from '@mui/material';
 import axios from 'axios';  // Importar axios para hacer solicitudes HTTP
 
 const calculateAge = (birthDate) => {
@@ -18,8 +18,9 @@ const calculateAge = (birthDate) => {
 
 const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handleChangePage, handleChangeRowsPerPage, setParticipants }) => {
   const [paymentProofs, setPaymentProofs] = useState({});
-  console.log(paymentProofs, "soy los payment proofs")
+  const [paymentStatus, setPaymentStatus] = useState({});
 
+  // Fetch del comprobante de pago
   const fetchPaymentProof = async (aztlanId) => {
     try {
       const response = await fetch(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${aztlanId}/payment-proof-url`);
@@ -36,17 +37,39 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
   };
 
   useEffect(() => {
-    // Fetch de los comprobantes de pago de todos los participantes
     participants.forEach((participant) => {
       fetchPaymentProof(participant.aztlan_id);
     });
   }, [participants]);
 
+  // Función para actualizar el estado del pago
+  const updatePaymentStatus = async (aztlanId, isPaymentComplete) => {
+    try {
+      const response = await axios.put(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${aztlanId}/payment-status/${isPaymentComplete}`);
+      if (response.status === 200) {
+        setPaymentStatus((prevStatus) => ({
+          ...prevStatus,
+          [aztlanId]: isPaymentComplete
+        }));
+        alert('Estado de pago actualizado con éxito');
+      } else {
+        alert('Hubo un error al actualizar el estado de pago');
+      }
+    } catch (error) {
+      console.error('Error al actualizar el estado de pago:', error);
+      alert('Hubo un error al actualizar el estado de pago');
+    }
+  };
+
+  // Manejar el cambio del switch
+  const handleSwitchChange = (event, aztlanId) => {
+    const isPaymentComplete = event.target.checked ? 1 : 0;
+    updatePaymentStatus(aztlanId, isPaymentComplete);
+  };
+
   const handleDelete = async (participantId) => {
     try {
-      // Cambiar la URL al nuevo endpoint
       const response = await axios.delete(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${participantId}`);
-      
       if (response.status === 200) {
         setParticipants(prevParticipants => prevParticipants.filter(participant => participant.aztlan_id !== participantId));
         alert('Participante eliminado con éxito.');
@@ -102,7 +125,14 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
                 <TableCell>{participant.name}</TableCell>
                 <TableCell>{participant.category}</TableCell>
                 <TableCell>{participant.aztlan_id}</TableCell>
-                <TableCell>{participant.is_payment_complete ? 'Sí' : 'No'}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={paymentStatus[participant.aztlan_id] === 1 || participant.is_payment_complete}
+                    onChange={(event) => handleSwitchChange(event, participant.aztlan_id)}
+                    name="paymentStatus"
+                    inputProps={{ 'aria-label': 'payment status switch' }}
+                  />
+                </TableCell>
                 <TableCell>{calculateAge(participant.birth_date)} años</TableCell>
                 <TableCell>
                   {paymentProofs[participant.aztlan_id] ? (
