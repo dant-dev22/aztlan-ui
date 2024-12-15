@@ -94,7 +94,7 @@ const UploadProof = ({ onBack }) => {
           <Box sx={{ marginBottom: "1rem" }}>
             <TextField
               fullWidth
-              label="ID de Registro"
+              label="Aztlan ID"
               name="id"
               variant="outlined"
               required
@@ -108,6 +108,9 @@ const UploadProof = ({ onBack }) => {
           <Box sx={{ marginBottom: "1rem", color: "black", fontSize: "1.0rem" }}>
             <Typography>
               El comprobante debe ser una imagen en formato JPG o JPEG, y no mayor a 6MB.
+            </Typography>
+            <Typography>
+              No recuerdas tu aztlan ID? contáctanos al correo ejemplo@gmail.com.
             </Typography>
           </Box>
 
