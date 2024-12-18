@@ -35,13 +35,15 @@ function AdminAztlan() {
     setSearchQuery(event.target.value);
   };
 
-  // Filtrar los participantes según el nombre
+  // Filtrar los participantes según nombre, academia y categoría
   useEffect(() => {
     if (searchQuery === "") {
       setFilteredParticipants(participants); // Si no hay texto de búsqueda, mostrar todos
     } else {
       const filtered = participants.filter(participant =>
-        participant.name.toLowerCase().includes(searchQuery.toLowerCase())
+        participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        participant.academy.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        participant.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredParticipants(filtered);
     }
@@ -76,12 +78,13 @@ function AdminAztlan() {
   return (
     <Container>
       <TextField
-        label="Buscar por nombre"
+        label="Buscar por nombre, academia o años entrenando"
         variant="outlined"
         fullWidth
         value={searchQuery}
         onChange={handleSearchChange}
         sx={{ marginBottom: '1rem' }}
+        placeholder="Busca por nombre, academia o años entrenando"
       />
       
       <Button
