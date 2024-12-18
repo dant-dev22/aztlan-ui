@@ -81,7 +81,7 @@ const Form = ({ onBack }) => {
         <CircularProgress size={50} /> // Mostrar el spinner cuando esté cargando
       ) : success ? ( 
         <SuccessForm
-          aztlanID={aztlanID}
+          aztlanID={aztlanID} onBack={onBack}
         />
       ) : (
         <RegistrationForm

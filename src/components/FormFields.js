@@ -7,7 +7,7 @@ const FormFields = ({ formData, handleChange, error, inputStyles }) => {
       <Grid item xs={12}>
         <TextField
           fullWidth
-          label="Nombre"
+          label="Nombre Completo"
           name="name"
           value={formData.name}
           onChange={handleChange}
@@ -95,7 +95,7 @@ const FormFields = ({ formData, handleChange, error, inputStyles }) => {
       <Grid item xs={12}>
         <TextField
           fullWidth
-          label="Años entrenando"
+          label="Tiempo entrenando"
           name="category"
           type="number"
           value={formData.category}
