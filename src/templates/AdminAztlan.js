@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, CircularProgress, Button, TextField } from '@mui/material';
 import ParticipantsTable from '../components/ParticipantsTable';
+import { generateCSV, downloadCSV } from './csvUtils';
 
 const API_URL = "https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws"; // Nuevo endpoint
 
@@ -46,20 +47,14 @@ function AdminAztlan() {
     }
   }, [searchQuery, participants]);
 
-  const downloadCSV = () => {
+  const handleDownloadCSV = () => {
     setLoading(true);
     try {
-      const csvData = filteredParticipants.map(participant =>
-        `${participant.id}, ${participant.weight},${participant.name},${participant.category},${participant.academy},${participant.birth_date},${participant.aztlan_id},${participant.is_payment_complete}`
-      ).join('\n');
-
-      const blob = new Blob([csvData], { type: 'text/csv' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'participantes.csv';
-      link.click();
+      const csvContent = generateCSV(filteredParticipants);
+      downloadCSV('participantes.csv', csvContent);
     } catch (error) {
       console.error('Error al generar el archivo CSV:', error);
+      alert('Hubo un problema al generar el archivo CSV. Por favor, inténtalo de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -92,7 +87,7 @@ function AdminAztlan() {
       <Button
         variant="contained"
         color="primary"
-        onClick={downloadCSV}
+        onClick={handleDownloadCSV}
         disabled={loading} 
       >
         {loading ? <CircularProgress size={24} /> : "Descargar CSV"}
@@ -105,7 +100,7 @@ function AdminAztlan() {
           participants={filteredParticipants} // Usar los participantes filtrados
           page={page}
           rowsPerPage={rowsPerPage}
-          downloadCSV={downloadCSV}
+          downloadCSV={handleDownloadCSV}
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           setParticipants={setParticipants}
