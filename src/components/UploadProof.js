@@ -7,32 +7,34 @@ import {
   TextField,
   Box,
   Alert,
+  CircularProgress, // Importa el spinner
 } from "@mui/material";
 
 const UploadProof = ({ onBack }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [fileError, setFileError] = useState("");
-  const [isVisible, setIsVisible] = useState(false); // Nuevo estado para el fade-in
+  const [isVisible, setIsVisible] = useState(false);
+  const [isUploading, setIsUploading] = useState(false); // Estado para el spinner
 
   useEffect(() => {
-    setIsVisible(true); // Activar fade-in cuando el componente se monta
+    setIsVisible(true);
   }, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const validFormats = ["image/jpeg", "image/jpg"];
-      const maxSize = 6 * 1024 * 1024; // 6MB
+      const maxSize = 6 * 1024 * 1024;
 
       if (!validFormats.includes(file.type)) {
         setFileError("El archivo debe ser en formato JPG o JPEG.");
-        e.target.value = ""; // Reseteamos el input
+        e.target.value = "";
       } else if (file.size > maxSize) {
         setFileError("El archivo no puede ser mayor a 6MB.");
-        e.target.value = ""; // Reseteamos el input
+        e.target.value = "";
       } else {
-        setFileError(""); // Si todo está bien, limpiamos el error
+        setFileError("");
       }
     }
   };
@@ -40,7 +42,7 @@ const UploadProof = ({ onBack }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
-    setFileError(""); // Limpiar cualquier error previo en archivo
+    setFileError("");
 
     const formData = new FormData(e.target);
     const participantId = formData.get("id");
@@ -51,12 +53,14 @@ const UploadProof = ({ onBack }) => {
       return;
     }
 
+    setIsUploading(true); // Activar el spinner
     try {
       const data = new FormData();
       data.append("file", proofFile);
+      const API_URL = "https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws";
 
       await axios.post(
-        `http://127.0.0.1:8000/participants/${participantId}/upload`,
+        `${API_URL}/participants/${participantId}/upload`,
         data,
         {
           headers: {
@@ -64,13 +68,14 @@ const UploadProof = ({ onBack }) => {
           },
         }
       );
-
       setIsSubmitted(true);
     } catch (error) {
-      console.error(error.response);
+      console.error("soy el error", error.response);
       setErrorMessage(
         error.response?.data?.detail || "Ocurrió un error al subir el comprobante."
       );
+    } finally {
+      setIsUploading(false); // Desactivar el spinner
     }
   };
 
@@ -81,8 +86,8 @@ const UploadProof = ({ onBack }) => {
         padding: "2rem",
         textAlign: "center",
         backgroundColor: "#D6D6D6",
-        opacity: isVisible ? 1 : 0, // Aparece lentamente
-        transition: "opacity 1s ease-in", // Transición de fade-in
+        opacity: isVisible ? 1 : 0,
+        transition: "opacity 1s ease-in",
       }}
     >
       {isSubmitted ? (
@@ -140,7 +145,7 @@ const UploadProof = ({ onBack }) => {
                 accept=".jpg,.jpeg"
                 hidden
                 required
-                onChange={handleFileChange} // Añadir validación del archivo
+                onChange={handleFileChange}
               />
             </Button>
             {fileError && (
@@ -157,14 +162,20 @@ const UploadProof = ({ onBack }) => {
           )}
 
           <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-            <Button type="submit" variant="contained" sx={{ backgroundColor: "#FF5722" }}>
-              Enviar
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ backgroundColor: "#FF5722" }}
+              disabled={isUploading} // Deshabilita mientras sube
+            >
+              {isUploading ? <CircularProgress size={24} /> : "Enviar"}
             </Button>
             <Button
               type="button"
               variant="contained"
               sx={{ backgroundColor: "#FFC107" }}
               onClick={onBack}
+              disabled={isUploading} // Deshabilita el botón de volver también
             >
               Volver
             </Button>
