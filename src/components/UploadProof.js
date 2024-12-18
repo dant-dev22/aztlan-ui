@@ -7,34 +7,40 @@ import {
   TextField,
   Box,
   Alert,
-  CircularProgress, // Importa el spinner
 } from "@mui/material";
 
 const UploadProof = ({ onBack }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [fileError, setFileError] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
-  const [isUploading, setIsUploading] = useState(false); // Estado para el spinner
+  const [isVisible, setIsVisible] = useState(false); // Nuevo estado para el fade-in
+  const [preview, setPreview] = useState(null); // Estado para la vista previa de la imagen
+  const [fileSize, setFileSize] = useState(null); // Estado para el tamaño de la imagen
 
   useEffect(() => {
-    setIsVisible(true);
+    setIsVisible(true); // Activar fade-in cuando el componente se monta
   }, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const validFormats = ["image/jpeg", "image/jpg"];
-      const maxSize = 6 * 1024 * 1024;
+      const maxSize = 6 * 1024 * 1024; // 6MB
 
       if (!validFormats.includes(file.type)) {
         setFileError("El archivo debe ser en formato JPG o JPEG.");
-        e.target.value = "";
+        e.target.value = ""; // Reseteamos el input
+        setPreview(null); // Limpiar vista previa
+        setFileSize(null); // Limpiar tamaño
       } else if (file.size > maxSize) {
         setFileError("El archivo no puede ser mayor a 6MB.");
-        e.target.value = "";
+        e.target.value = ""; // Reseteamos el input
+        setPreview(null); // Limpiar vista previa
+        setFileSize(null); // Limpiar tamaño
       } else {
-        setFileError("");
+        setFileError(""); // Si todo está bien, limpiamos el error
+        setPreview(URL.createObjectURL(file)); // Crear URL para la vista previa
+        setFileSize((file.size / 1024 / 1024).toFixed(2)); // Calcular tamaño en MB
       }
     }
   };
@@ -53,7 +59,6 @@ const UploadProof = ({ onBack }) => {
       return;
     }
 
-    setIsUploading(true); // Activar el spinner
     try {
       const data = new FormData();
       data.append("file", proofFile);
@@ -74,8 +79,6 @@ const UploadProof = ({ onBack }) => {
       setErrorMessage(
         error.response?.data?.detail || "Ocurrió un error al subir el comprobante."
       );
-    } finally {
-      setIsUploading(false); // Desactivar el spinner
     }
   };
 
@@ -86,8 +89,8 @@ const UploadProof = ({ onBack }) => {
         padding: "2rem",
         textAlign: "center",
         backgroundColor: "#D6D6D6",
-        opacity: isVisible ? 1 : 0,
-        transition: "opacity 1s ease-in",
+        opacity: isVisible ? 1 : 0, // Aparece lentamente
+        transition: "opacity 1s ease-in", // Transición de fade-in
       }}
     >
       {isSubmitted ? (
@@ -145,7 +148,7 @@ const UploadProof = ({ onBack }) => {
                 accept=".jpg,.jpeg"
                 hidden
                 required
-                onChange={handleFileChange}
+                onChange={handleFileChange} // Añadir validación del archivo
               />
             </Button>
             {fileError && (
@@ -155,6 +158,32 @@ const UploadProof = ({ onBack }) => {
             )}
           </Box>
 
+          {preview && (
+            <Box
+              sx={{
+                marginTop: "1rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src={preview}
+                alt="Vista previa"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "200px",
+                  marginBottom: "0.5rem",
+                  borderRadius: "8px",
+                  border: "1px solid #ccc",
+                }}
+              />
+              <Typography variant="body2" sx={{ color: "#555" }}>
+                Tamaño del archivo: {fileSize} MB
+              </Typography>
+            </Box>
+          )}
+
           {errorMessage && (
             <Alert severity="error" sx={{ marginBottom: "1rem" }}>
               {errorMessage}
@@ -162,20 +191,14 @@ const UploadProof = ({ onBack }) => {
           )}
 
           <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ backgroundColor: "#FF5722" }}
-              disabled={isUploading} // Deshabilita mientras sube
-            >
-              {isUploading ? <CircularProgress size={24} /> : "Enviar"}
+            <Button type="submit" variant="contained" sx={{ backgroundColor: "#FF5722" }}>
+              Enviar
             </Button>
             <Button
               type="button"
               variant="contained"
               sx={{ backgroundColor: "#FFC107" }}
               onClick={onBack}
-              disabled={isUploading} // Deshabilita el botón de volver también
             >
               Volver
             </Button>
