@@ -29,7 +29,7 @@ function AdminAztlan() {
         variant="outlined"
         fullWidth
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)} // Actualiza el searchQuery directamente
+        onChange={(e) => setSearchQuery(e.target.value)}
         sx={{ marginBottom: '1rem' }}
         placeholder="Busca por nombre, academia o años entrenando"
       />

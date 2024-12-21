@@ -15,7 +15,7 @@ const calculateAge = (birthDate) => {
   return age;
 };
 
-const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handleChangePage, handleChangeRowsPerPage, setParticipants }) => {
+const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants }) => {
   const [paymentProofs, setPaymentProofs] = useState({});
   const [openModal, setOpenModal] = useState(false); // Modal para actualización
   const [openDeleteModal, setOpenDeleteModal] = useState(false); // Modal para eliminación
@@ -105,6 +105,18 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
     setOpenDeleteModal(false);
   };
 
+  const getCategory = (category) => {
+    if (category >= 0 && category <= 2) {
+      return 'Principiante';
+    } else if (category >= 3 && category <= 4) {
+      return 'Intermedio';
+    } else if (category > 4) {
+      return 'Experto';
+    } else {
+      return 'Desconocido';
+    }
+  };
+
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -118,6 +130,7 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
               <TableCell>Aztlan ID</TableCell>
               <TableCell>Pago Completo</TableCell>
               <TableCell>Edad</TableCell>
+              <TableCell>Categoría</TableCell>
               <TableCell>Comprobante</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
@@ -140,6 +153,7 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
                 </TableCell>
  
                 <TableCell>{calculateAge(participant.birth_date)} años</TableCell>
+                <TableCell>{getCategory(participant.category)}</TableCell>
                 <TableCell>
                   {paymentProofs[participant.aztlan_id] ? (
                     <a href={paymentProofs[participant.aztlan_id]} target="_blank" rel="noopener noreferrer">
@@ -160,7 +174,6 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
         </Table>
       </TableContainer>
 
-      {/* Modal de actualización */}
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Confirmar actualización</DialogTitle>
         <DialogContent>
@@ -176,7 +189,6 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, downloadCSV, handl
         </DialogActions>
       </Dialog>
 
-      {/* Modal de eliminación */}
       <Dialog open={openDeleteModal} onClose={handleCloseDeleteModal}>
         <DialogTitle>Confirmar eliminación</DialogTitle>
         <DialogContent>

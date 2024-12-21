@@ -19,7 +19,7 @@ export const fetchParticipants = async (API_URL, setLoading, setParticipants, se
 
 export const handleSearchChange = (searchQuery, participants, setFilteredParticipants) => {
   if (searchQuery === "") {
-    setFilteredParticipants(participants); // Si no hay texto de búsqueda, mostrar todos
+    setFilteredParticipants(participants);
   } else {
     const filtered = participants.filter(participant =>
       participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
