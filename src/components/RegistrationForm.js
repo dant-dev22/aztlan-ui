@@ -44,7 +44,7 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
         transition: "opacity 0.5s ease-in-out",
       }}
     >
-      <Typography variant="h4" align="center" gutterBottom>
+      <Typography variant="h6" align="center" gutterBottom>
         Registro Torneo Feb-2025
       </Typography>
 

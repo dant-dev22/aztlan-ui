@@ -79,7 +79,12 @@ function AdminAztlan() {
             )}
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleLogin} color="primary" variant="contained">
+            <Button 
+              onClick={handleLogin}
+              variant="contained" 
+              sx={{
+                backgroundColor: "#FF5722"
+              }}>
               Ingresar
             </Button>
           </DialogActions>
@@ -106,8 +111,10 @@ function AdminAztlan() {
           
           <Button
             variant="contained"
-            color="primary"
             onClick={() => handleDownloadCSV(filteredParticipants, setLoading, generateCSV, downloadCSV)}
+            sx={{
+              backgroundColor: "#FF5722"
+            }}
             disabled={loading}
           >
             {loading ? <CircularProgress size={24} /> : "Descargar CSV"}
