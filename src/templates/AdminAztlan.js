@@ -2,78 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Container, CircularProgress, Button, TextField } from '@mui/material';
 import ParticipantsTable from '../components/ParticipantsTable';
 import { generateCSV, downloadCSV } from './csvUtils';
+import { fetchParticipants, handleSearchChange, handleDownloadCSV } from '../utils/participantsUtils';
 
-const API_URL = "https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws"; // Nuevo endpoint
+const API_URL = "https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws";
 
 function AdminAztlan() {
   const [participants, setParticipants] = useState([]);
-  const [filteredParticipants, setFilteredParticipants] = useState([]); // Estado para participantes filtrados
+  const [filteredParticipants, setFilteredParticipants] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
-
-  const fetchParticipants = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/participants`);
-      if (!response.ok) {
-        throw new Error('Error al obtener los participantes');
-      }
-
-      const data = await response.json();
-      setParticipants(data);
-      setFilteredParticipants(data); // Inicialmente mostrar todos los participantes
-    } catch (error) {
-      console.error('Error al obtener los participantes:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  // Filtrar los participantes según nombre, academia y categoría
-  useEffect(() => {
-    if (searchQuery === "") {
-      setFilteredParticipants(participants); // Si no hay texto de búsqueda, mostrar todos
-    } else {
-      const filtered = participants.filter(participant =>
-        participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        participant.academy.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        participant.category.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredParticipants(filtered);
-    }
-  }, [searchQuery, participants]);
-
-  const handleDownloadCSV = () => {
-    setLoading(true);
-    try {
-      const csvContent = generateCSV(filteredParticipants);
-      downloadCSV('participantes.csv', csvContent);
-    } catch (error) {
-      console.error('Error al generar el archivo CSV:', error);
-      alert('Hubo un problema al generar el archivo CSV. Por favor, inténtalo de nuevo.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleChangePage = (newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); 
-  };
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetchParticipants();
+    fetchParticipants(API_URL, setLoading, setParticipants, setFilteredParticipants);
   }, []);
+
+  useEffect(() => {
+    handleSearchChange(searchQuery, participants, setFilteredParticipants);
+  }, [searchQuery, participants]);
 
   return (
     <Container>
@@ -82,7 +29,7 @@ function AdminAztlan() {
         variant="outlined"
         fullWidth
         value={searchQuery}
-        onChange={handleSearchChange}
+        onChange={(e) => setSearchQuery(e.target.value)} // Actualiza el searchQuery directamente
         sx={{ marginBottom: '1rem' }}
         placeholder="Busca por nombre, academia o años entrenando"
       />
@@ -90,8 +37,8 @@ function AdminAztlan() {
       <Button
         variant="contained"
         color="primary"
-        onClick={handleDownloadCSV}
-        disabled={loading} 
+        onClick={() => handleDownloadCSV(filteredParticipants, setLoading, generateCSV, downloadCSV)}
+        disabled={loading}
       >
         {loading ? <CircularProgress size={24} /> : "Descargar CSV"}
       </Button>
@@ -100,12 +47,15 @@ function AdminAztlan() {
         <CircularProgress />
       ) : (
         <ParticipantsTable
-          participants={filteredParticipants} // Usar los participantes filtrados
+          participants={filteredParticipants}
           page={page}
           rowsPerPage={rowsPerPage}
-          downloadCSV={handleDownloadCSV}
-          handleChangePage={handleChangePage}
-          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          downloadCSV={() => handleDownloadCSV(filteredParticipants, setLoading, generateCSV, downloadCSV)}
+          handleChangePage={(newPage) => setPage(newPage)}
+          handleChangeRowsPerPage={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+          }}
           setParticipants={setParticipants}
         />
       )}
