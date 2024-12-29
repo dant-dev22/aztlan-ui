@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Im
 
 import App from "./App"; 
 import AdminAztlan from "./templates/AdminAztlan";
+import Aztlan2024 from "./components/Aztlan2024";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -13,6 +14,7 @@ ReactDOM.render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/admin-aztlan" element={<AdminAztlan />} />
+          <Route path="/aztlan-2024" element={<Aztlan2024 />} />
         </Routes>
       </Router>
   </Provider>,

@@ -1,18 +1,25 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom'; // Importar Routes y Route
-import './App.css'; // Importar los estilos CSS
-import Home from './templates/Home'; // Componente Home
-import AdminAztlan from './templates/AdminAztlan';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import "./App.css";
+import Home from "./templates/Home";
+import AdminAztlan from "./templates/AdminAztlan";
+import Navbar from "./components/Navbar"; // Nuevo componente de navbar
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* Header con el Navbar */}
+      <header>
+        <Navbar />
+      </header>
+
+      {/* Body de la aplicación */}
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin-aztlan" element={<AdminAztlan />} />
         </Routes>
-      </header>
+      </main>
     </div>
   );
 }

@@ -3,6 +3,18 @@ import Form from "../components/Form";
 import UploadProof from "../components/UploadProof";
 import logo from "../assets/img/aztlannobg.png"; 
 import { Box, Button, Typography } from "@mui/material";
+import { keyframes } from "@emotion/react";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const Home = () => {
   const [view, setView] = useState("menu");
@@ -38,7 +50,7 @@ const Home = () => {
         />
       </Box>
 
-      <Typography variant="h4" sx={{ color: "#1C1C1C", margin: "1rem 0" }}>
+      <Typography variant="h4" sx={{ color: "#1C1C1C", margin: "1rem 0", animation: `${fadeIn} 1s ease-in-out`,}}>
         Aztlan Grappling 2025
       </Typography>
 
