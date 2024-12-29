@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Grid, Typography, Button } from '@mui/material';
 import Navbar from './Navbar';
 import { keyframes } from "@emotion/react";
+import Footer from "./Footer"; // Importar el Footer
 
 const fadeIn = keyframes`
   from {
@@ -107,6 +108,7 @@ const Aztlan2024 = () => {
           })}
         </Grid>
       </Box>
+    <Footer />
     </Box>
   );
 };

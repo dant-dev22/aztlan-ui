@@ -34,7 +34,7 @@ const Navbar = () => {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handleMenuClose}>
-              <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Inicio</Link>
+              <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Registro</Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
               <Link to="/admin-aztlan" style={{ textDecoration: "none", color: "inherit" }}>Admin</Link>
@@ -46,7 +46,7 @@ const Navbar = () => {
         <Box sx={{ display: { xs: "none", sm: "flex" } }}>
           <Link to="/" style={{ textDecoration: "none", color: "white", margin: "0 1rem" }}>
             <Typography variant="body1" sx={{ color: "black" }}>
-                Inicio
+               Registro 
             </Typography>
           </Link>
           <Link to="/aztlan-2024" style={{ textDecoration: "none", color: "white", margin: "0 1rem" }}>
