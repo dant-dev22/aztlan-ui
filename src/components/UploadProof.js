@@ -118,7 +118,7 @@ const UploadProof = ({ onBack }) => {
               El comprobante debe ser una imagen en formato JPG o JPEG, y no mayor a 6MB.
             </Typography>
             <Typography>
-              No recuerdas tu aztlan ID? contáctanos al correo ejemplo@gmail.com.
+              No recuerdas tu aztlan ID? Revisa en tu bandeja de entrada/spam un correo con el titulo "Registro Aztlan Grappling" contáctanos al correo torneoaztlangrappling@gmail.com.
             </Typography>
           </Box>
 
