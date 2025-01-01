@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "white" }}>
+    <AppBar position="static" sx={{ backgroundColor: "#f5f5f5" }}> {/* Gris claro */}
       <Toolbar
         sx={{
           display: "flex",
@@ -24,8 +24,18 @@ const Navbar = () => {
         }}
       >
         {/* Botón de hamburguesa para dispositivos móviles */}
-        <Box sx={{ display: { xs: "block", sm: "none" }, position: "absolute", left: 0 }}>
-          <IconButton edge="start" color="inherit" onClick={handleMenuOpen}>
+        <Box
+          sx={{
+            display: { xs: "block", sm: "none" },
+            position: "absolute",
+            left: 0,
+          }}
+        >
+          <IconButton
+            edge="start"
+            sx={{ color: "black" }} // Botón de hamburguesa negro
+            onClick={handleMenuOpen}
+          >
             <MenuIcon />
           </IconButton>
           <Menu
@@ -34,30 +44,52 @@ const Navbar = () => {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handleMenuClose}>
-              <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Registro</Link>
+              <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+                Registro
+              </Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
-              <Link to="/admin-aztlan" style={{ textDecoration: "none", color: "inherit" }}>Admin</Link>
+              <Link
+                to="/aztlan-2024"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                Aztlan 2024
+              </Link>
             </MenuItem>
           </Menu>
         </Box>
 
         {/* Menú de navegación para pantallas grandes */}
         <Box sx={{ display: { xs: "none", sm: "flex" } }}>
-          <Link to="/" style={{ textDecoration: "none", color: "white", margin: "0 1rem" }}>
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              color: "white",
+              margin: "0 1rem",
+            }}
+          >
             <Typography variant="body1" sx={{ color: "black" }}>
-               Registro 
+              Registro
             </Typography>
           </Link>
-          <Link to="/aztlan-2024" style={{ textDecoration: "none", color: "white", margin: "0 1rem" }}>
+          <Link
+            to="/aztlan-2024"
+            style={{
+              textDecoration: "none",
+              color: "white",
+              margin: "0 1rem",
+            }}
+          >
             <Typography variant="body1" sx={{ color: "black" }}>
-               Aztlan 2024 
+              Aztlan 2024
             </Typography>
           </Link>
         </Box>
       </Toolbar>
     </AppBar>
   );
-};
+
+  };
 
 export default Navbar;
