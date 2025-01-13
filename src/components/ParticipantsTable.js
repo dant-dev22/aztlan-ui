@@ -123,7 +123,6 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants })
         <Table aria-label="participantes">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>Nombre</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Años entrenando</TableCell>
@@ -139,7 +138,6 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants })
           <TableBody>
             {participants.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((participant) => (
               <TableRow key={participant.id}>
-                <TableCell>{participant.id}</TableCell>
                 <TableCell>{participant.name}</TableCell>
                 <TableCell>{participant.email}</TableCell>
                 <TableCell>{participant.category}</TableCell>
