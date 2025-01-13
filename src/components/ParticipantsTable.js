@@ -125,6 +125,7 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants })
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Nombre</TableCell>
+              <TableCell>Email</TableCell>
               <TableCell>Años entrenando</TableCell>
               <TableCell>Academia</TableCell>
               <TableCell>Aztlan ID</TableCell>
@@ -140,6 +141,7 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants })
               <TableRow key={participant.id}>
                 <TableCell>{participant.id}</TableCell>
                 <TableCell>{participant.name}</TableCell>
+                <TableCell>{participant.email}</TableCell>
                 <TableCell>{participant.category}</TableCell>
                 <TableCell>{participant.academy}</TableCell>
                 <TableCell>{participant.aztlan_id}</TableCell>
