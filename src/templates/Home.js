@@ -70,24 +70,6 @@ const Home = () => {
             Registrarse
           </Button>
 
-          <Box sx={{ margin: "1rem 0" }}>
-            <Typography variant="body1" sx={{ color: "#333" }}>
-              ¿No has subido tu comprobante? Completa tu registro subiendo tu comprobante aquí:
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{
-                padding: "1rem 2rem",
-                margin: "1rem",
-                backgroundColor: "#FFC107",
-                color: "white",
-                borderRadius: "4px",
-              }}
-              onClick={() => handleViewChange("uploadProof")}
-            >
-              Subir Comprobante
-            </Button>
-          </Box>
         </Box>
       )}
 
