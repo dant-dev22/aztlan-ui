@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
+
 const calculateAge = (birthDate) => {
   const birthDateObj = new Date(birthDate);
   const today = new Date();
@@ -15,12 +16,16 @@ const calculateAge = (birthDate) => {
   return age;
 };
 
-const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants }) => {
+const ParticipantsTable = ({ participants, setParticipants }) => {
   const [paymentProofs, setPaymentProofs] = useState({});
-  const [openModal, setOpenModal] = useState(false); // Modal para actualización
-  const [openDeleteModal, setOpenDeleteModal] = useState(false); // Modal para eliminación
+  const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedParticipant, setSelectedParticipant] = useState(null);
-  const [participantToDelete, setParticipantToDelete] = useState(null); // Participante a eliminar
+  const [participantToDelete, setParticipantToDelete] = useState(null);
+  
+  // Estado para la paginación
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     participants.forEach((participant) => {
@@ -105,6 +110,15 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants })
     setOpenDeleteModal(false);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const getCategory = (category) => {
     if (category >= 0 && category <= 2) {
       return 'Principiante';
@@ -151,7 +165,6 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants })
                     inputProps={{ 'aria-label': 'payment status switch' }}
                   />
                 </TableCell>
- 
                 <TableCell>{calculateAge(participant.birth_date)} años</TableCell>
                 <TableCell>{getCategory(participant.category)}</TableCell>
                 <TableCell>
@@ -174,35 +187,15 @@ const ParticipantsTable = ({ participants, page, rowsPerPage, setParticipants })
         </Table>
       </TableContainer>
 
-      <Dialog open={openModal} onClose={handleCloseModal}>
-        <DialogTitle>Confirmar actualización</DialogTitle>
-        <DialogContent>
-          <Typography>¿Estás seguro de que deseas actualizar el estado de pago para el participante?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal} color="secondary">
-            No
-          </Button>
-          <Button onClick={handleConfirmUpdate} color="primary">
-            Sí
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={openDeleteModal} onClose={handleCloseDeleteModal}>
-        <DialogTitle>Confirmar eliminación</DialogTitle>
-        <DialogContent>
-          <Typography>¿Estás seguro de que deseas eliminar al participante?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteModal} color="secondary">
-            No
-          </Button>
-          <Button onClick={handleConfirmDelete} color="primary">
-            Sí
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 20]}
+        component="div"
+        count={participants.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </Container>
   );
 };
