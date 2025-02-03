@@ -36,6 +36,10 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
   const fetchPaymentProof = async (aztlanId) => {
     try {
       const response = await fetch(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${aztlanId}/payment-proof-url`);
+      if (response.status === 204) {
+        console.log("No content, skipping JSON parsing.");
+        return;
+      }
       if (response.ok) {
         const data = await response.json();
         setPaymentProofs((prev) => ({
@@ -186,6 +190,35 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Dialog open={openModal} onClose={handleCloseModal}>
+        <DialogTitle>Confirmar actualización</DialogTitle>
+        <DialogContent>
+          <Typography>¿Estás seguro de que deseas actualizar el estado de pago para el participante?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="secondary">
+            No
+          </Button>
+          <Button onClick={handleConfirmUpdate} color="primary">
+            Sí
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openDeleteModal} onClose={handleCloseDeleteModal}>
+        <DialogTitle>Confirmar eliminación</DialogTitle>
+        <DialogContent>
+          <Typography>¿Estás seguro de que deseas eliminar al participante?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteModal} color="secondary">
+            No
+          </Button>
+          <Button onClick={handleConfirmDelete} color="primary">
+            Sí
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}
