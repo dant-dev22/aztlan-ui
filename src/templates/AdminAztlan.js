@@ -25,6 +25,10 @@ function AdminAztlan() {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    handleSearchChange(searchQuery, participants, setFilteredParticipants);
+  }, [searchQuery, participants]);
+
   const handleLogin = () => {
     const validUsername = "admin";
     const validPassword = "JcA-Dh7";
