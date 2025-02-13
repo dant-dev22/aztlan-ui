@@ -135,6 +135,7 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
     }
   };
 
+
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -142,7 +143,6 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
-              <TableCell>Email</TableCell>
               <TableCell>Años entrenando</TableCell>
               <TableCell>Academia</TableCell>
               <TableCell>Aztlan ID</TableCell>
@@ -157,7 +157,6 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
             {participants.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((participant) => (
               <TableRow key={participant.id}>
                 <TableCell>{participant.name}</TableCell>
-                <TableCell>{participant.email}</TableCell>
                 <TableCell>{participant.category}</TableCell>
                 <TableCell>{participant.academy}</TableCell>
                 <TableCell>{participant.aztlan_id}</TableCell>

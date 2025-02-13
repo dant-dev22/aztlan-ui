@@ -1,7 +1,19 @@
 export const escapeCSVValue = (value) => `"${String(value).replace(/"/g, '""')}"`;
 
 export const generateCSV = (participants) => {
-  const headers = "ID,Weight,Name,Años entrenando,Academy,Birth Date,Aztlan ID,Payment Complete";
+  const headers = "ID,Weight,Name,Años entrenando,Academia,Edad,Aztlan ID,Payment Complete";
+
+  // Función para calcular la edad desde birth_date
+  const calculateAge = (birthDate) => {
+    const birth = new Date(birthDate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return `${age} años`;
+  };
 
   // Filtrar participantes repetidos
   const filteredParticipants = participants.reduce((acc, participant) => {
@@ -18,8 +30,6 @@ export const generateCSV = (participants) => {
         // Si el participante actual tiene is_payment_complete y el existente no, reemplazar
         acc[existingParticipantIndex] = participant;
       } 
-      // Si ambos tienen el mismo estado de is_payment_complete o ninguno lo tiene,
-      // se mantiene el primero que llegó.
     }
     return acc;
   }, []);
@@ -33,7 +43,7 @@ export const generateCSV = (participants) => {
         participant.name,
         participant.category,
         participant.academy,
-        participant.birth_date,
+        calculateAge(participant.birth_date), // Convertir birth_date a edad
         participant.aztlan_id,
         participant.is_payment_complete
       ].map(escapeCSVValue).join(',')
