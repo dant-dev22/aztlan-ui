@@ -1,9 +1,8 @@
 export const escapeCSVValue = (value) => `"${String(value).replace(/"/g, '""')}"`;
 
 export const generateCSV = (participants) => {
-  const headers = "ID,Weight,Name,Años entrenando,Academia,Edad,Aztlan ID,Payment Complete";
+  const headers = "ID,Weight,Name,Tiempo entrenando,Categoría,Academia,Edad,Aztlan ID,Payment Complete";
 
-  // Función para calcular la edad desde birth_date
   const calculateAge = (birthDate) => {
     const birth = new Date(birthDate);
     const today = new Date();
@@ -15,21 +14,27 @@ export const generateCSV = (participants) => {
     return `${age} años`;
   };
 
-  // Filtrar participantes repetidos
+  const getCategory = (category) => {
+    if (category >= 0 && category <= 2) {
+      return 'Principiante';
+    } else if (category >= 3 && category <= 4) {
+      return 'Intermedio';
+    } else {
+      return 'Experto';
+    }
+  };
+
   const filteredParticipants = participants.reduce((acc, participant) => {
     const existingParticipantIndex = acc.findIndex(p =>
       p.name === participant.name && p.academy === participant.academy);
 
     if (existingParticipantIndex === -1) {
-      // Si no existe, agregar al array
       acc.push(participant);
     } else {
-      // Si existe, comparar si tiene is_payment_complete
       const existingParticipant = acc[existingParticipantIndex];
       if (participant.is_payment_complete && !existingParticipant.is_payment_complete) {
-        // Si el participante actual tiene is_payment_complete y el existente no, reemplazar
         acc[existingParticipantIndex] = participant;
-      } 
+      }
     }
     return acc;
   }, []);
@@ -42,16 +47,16 @@ export const generateCSV = (participants) => {
         participant.weight,
         participant.name,
         participant.category,
+        getCategory(participant.category), // Nuevo cálculo de categoría
         participant.academy,
-        calculateAge(participant.birth_date), // Convertir birth_date a edad
+        calculateAge(participant.birth_date),
         participant.aztlan_id,
-        participant.is_payment_complete
+        participant.is_payment_complete,
       ].map(escapeCSVValue).join(',')
     )
   ].join('\n');
 };
 
-// Función para descargar un archivo CSV
 export const downloadCSV = (filename, csvContent) => {
   const blob = new Blob([csvContent], { type: 'text/csv' });
   const link = document.createElement('a');
