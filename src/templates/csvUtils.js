@@ -1,3 +1,5 @@
+import { getCategory } from "../utils/participantsUtils";
+
 export const escapeCSVValue = (value) => `"${String(value).replace(/"/g, '""')}"`;
 
 export const generateCSV = (participants) => {
@@ -12,16 +14,6 @@ export const generateCSV = (participants) => {
       age--;
     }
     return `${age} años`;
-  };
-
-  const getCategory = (category) => {
-    if (category >= 0 && category <= 2) {
-      return 'Principiante';
-    } else if (category >= 3 && category <= 4) {
-      return 'Intermedio';
-    } else {
-      return 'Experto';
-    }
   };
 
   const filteredParticipants = participants.reduce((acc, participant) => {

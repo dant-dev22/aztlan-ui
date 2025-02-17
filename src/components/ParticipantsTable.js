@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
+import { getCategory } from '../utils/participantsUtils';
 
 const calculateAge = (birthDate) => {
   const birthDateObj = new Date(birthDate);
@@ -122,19 +123,6 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const getCategory = (category) => {
-    if (category >= 0 && category <= 2) {
-      return 'Principiante';
-    } else if (category >= 3 && category <= 4) {
-      return 'Intermedio';
-    } else if (category > 4) {
-      return 'Experto';
-    } else {
-      return 'Desconocido';
-    }
-  };
-
 
   return (
     <Container>

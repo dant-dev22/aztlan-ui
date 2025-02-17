@@ -42,3 +42,15 @@ export const handleDownloadCSV = (filteredParticipants, setLoading, generateCSV,
     setLoading(false);
   }
 };
+
+export const getCategory = (category) => {
+    if (category >= 0 && category <= 2) {
+      return 'Principiante';
+    } else if (category > 2 && category <= 4) {
+      return 'Intermedio';
+    } else if (category > 4) {
+      return 'Experto';
+    } else {
+      return 'Desconocido';
+    }
+};

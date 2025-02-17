@@ -20,7 +20,7 @@ const Form = ({ onBack }) => {
   };
 
   const validateForm = () => {
-    if (!formData.name || !formData.birth_date || !formData.weight || !formData.academy || !formData.height || !formData.category) {
+    if (!formData.name || !formData.birth_date || !formData.weight || !formData.academy || !formData.height) {
       return false;
     }
     return true;
@@ -50,7 +50,7 @@ const Form = ({ onBack }) => {
           weight: formData.weight,
           academy: formData.academy,
           height: formData.height,
-          category: formData.category,
+          category: formData.category || "1",
           payment_proof: formData.payment_proof || "", // Campo extra con valor nulo por defecto
           email: formData.email,
         }),

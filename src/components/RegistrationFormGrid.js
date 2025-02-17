@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Grid, TextField, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 
 const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
   return (
@@ -96,21 +96,21 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
         <Typography variant="body2" sx={{ display: 'block', marginTop: 0.5, color: 'text.secondary', textAlign: 'left' }}>
           - Principiante (0-2 año(s)) <br />
           - Intermedio (2-4 años) <br />
-          - Avanzado (más de 4 años) <br />
-          *Si tienes menos de un año entrenando, ingresa '1'
+          - Avanzado (más de 4 años)
         </Typography>
-        <TextField
-          fullWidth
-          label="Tiempo entrenando"
-          name="category"
-          type="number"
-          value={formData.category}
-          onChange={handleChange}
-          error={!!error?.category}
-          helperText={error?.category}
-          variant="outlined"
-          sx={inputStyles}
-        />
+        <FormControl fullWidth variant="outlined" sx={inputStyles}>
+          <InputLabel>Tiempo entrenando</InputLabel>
+          <Select
+            name="category"
+            value={formData.category || "1"}
+            onChange={handleChange}
+            error={!!error?.category}
+          >
+            <MenuItem value={"1"}>Principiante</MenuItem>
+            <MenuItem value={"3"}>Intermedio</MenuItem>
+            <MenuItem value={"5"}>Avanzado</MenuItem>
+          </Select>
+        </FormControl>
       </Grid>
     </Grid>
   );
