@@ -16,6 +16,9 @@ const calculateAge = (birthDate) => {
 
 // Función para filtrar participantes según la categoría seleccionada
 const filterParticipantsByCategory = (participants, filter) => {
+  if (filter === "todos") {
+   return participants; 
+  }
   return participants.filter(participant => {
     const age = calculateAge(participant.birth_date);
     const category = participant.category;

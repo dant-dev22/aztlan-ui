@@ -158,6 +158,7 @@ function AdminAztlan() {
               <MenuItem value="intermedios">Intermedios</MenuItem>
               <MenuItem value="avanzados">Avanzados</MenuItem>
               <MenuItem value="masters">Masters</MenuItem>
+              <MenuItem value="todos">todos</MenuItem>
             </Select>
 
             {/* Botón de descarga */}
