@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Container, CircularProgress, Button, TextField, Box, Typography, Dialog, DialogContent, DialogActions } from '@mui/material';
+import {
+  Container,
+  CircularProgress,
+  Button,
+  TextField,
+  Box,
+  Typography,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Select,
+  MenuItem,
+} from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'; // Ícono para el dropdown
 import ParticipantsTable from '../components/ParticipantsTable';
 import { generateCSV, downloadCSV } from './csvUtils';
 import { fetchParticipants, handleSearchChange, handleDownloadCSV } from '../utils/participantsUtils';
@@ -18,6 +31,7 @@ function AdminAztlan() {
   );
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState(""); // Estado para el filtro seleccionado
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -35,7 +49,7 @@ function AdminAztlan() {
 
     if (credentials.username === validUsername && credentials.password === validPassword) {
       setIsAuthenticated(true);
-      sessionStorage.setItem("isAuthenticated", "true"); // Guardar estado en sessionStorage
+      sessionStorage.setItem("isAuthenticated", "true");
       setError("");
     } else {
       setError("Usuario o contraseña incorrectos.");
@@ -44,7 +58,15 @@ function AdminAztlan() {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    sessionStorage.removeItem("isAuthenticated"); // Eliminar estado de sessionStorage
+    sessionStorage.removeItem("isAuthenticated");
+  };
+
+  const handleDownloadWithFilter = () => {
+    if (!selectedFilter) {
+      alert("Por favor, selecciona un filtro antes de descargar.");
+      return;
+    }
+    handleDownloadCSV(filteredParticipants, setLoading, generateCSV, downloadCSV, selectedFilter);
   };
 
   return (
@@ -83,9 +105,9 @@ function AdminAztlan() {
             )}
           </DialogContent>
           <DialogActions>
-            <Button 
+            <Button
               onClick={handleLogin}
-              variant="contained" 
+              variant="contained"
               sx={{
                 backgroundColor: "#FF5722"
               }}>
@@ -112,18 +134,46 @@ function AdminAztlan() {
             sx={{ marginBottom: '1rem' }}
             placeholder="Busca por nombre, academia o años entrenando"
           />
-          
-          <Button
-            variant="contained"
-            onClick={() => handleDownloadCSV(filteredParticipants, setLoading, generateCSV, downloadCSV)}
-            sx={{
-              backgroundColor: "#FF5722"
-            }}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : "Descargar CSV"}
-          </Button>
-          
+
+          {/* Dropdown y botón en la misma fila */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+            {/* Dropdown compacto */}
+            <Select
+              value={selectedFilter}
+              onChange={(e) => setSelectedFilter(e.target.value)}
+              displayEmpty
+              sx={{
+                width: '200px', // Ancho reducido
+                backgroundColor: '#f5f5f5', // Fondo gris claro
+                borderRadius: '4px', // Bordes redondeados
+                '& .MuiSelect-select': {
+                  padding: '10px 32px 10px 12px', // Padding ajustado
+                },
+              }}
+              IconComponent={ArrowDropDownIcon} // Ícono personalizado
+            >
+              <MenuItem value="" disabled>Selecciona un filtro</MenuItem>
+              <MenuItem value="juveniles">Juveniles e Infantiles</MenuItem>
+              <MenuItem value="principiantes">Principiantes</MenuItem>
+              <MenuItem value="intermedios">Intermedios</MenuItem>
+              <MenuItem value="avanzados">Avanzados</MenuItem>
+              <MenuItem value="masters">Masters</MenuItem>
+            </Select>
+
+            {/* Botón de descarga */}
+            <Button
+              variant="contained"
+              onClick={handleDownloadWithFilter}
+              sx={{
+                backgroundColor: "#FF5722",
+                padding: '10px 20px', // Padding ajustado
+              }}
+              disabled={loading || !selectedFilter}
+            >
+              {loading ? <CircularProgress size={24} /> : "Descargar CSV"}
+            </Button>
+          </Box>
+
           {loading ? (
             <CircularProgress />
           ) : (
@@ -131,7 +181,7 @@ function AdminAztlan() {
               participants={filteredParticipants}
               page={page}
               rowsPerPage={rowsPerPage}
-              downloadCSV={() => handleDownloadCSV(filteredParticipants, setLoading, generateCSV, downloadCSV)}
+              downloadCSV={() => handleDownloadCSV(filteredParticipants, setLoading, generateCSV, downloadCSV, selectedFilter)}
               handleChangePage={(newPage) => setPage(newPage)}
               handleChangeRowsPerPage={(event) => {
                 setRowsPerPage(parseInt(event.target.value, 10));

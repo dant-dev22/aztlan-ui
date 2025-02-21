@@ -30,11 +30,13 @@ export const handleSearchChange = (searchQuery, participants, setFilteredPartici
   }
 };
 
-export const handleDownloadCSV = (filteredParticipants, setLoading, generateCSV, downloadCSV) => {
+// Modificamos handleDownloadCSV para aceptar el filtro
+export const handleDownloadCSV = (filteredParticipants, setLoading, generateCSV, downloadCSV, filter) => {
   setLoading(true);
   try {
-    const csvContent = generateCSV(filteredParticipants);
-    downloadCSV('participantes.csv', csvContent);
+    const csvContent = generateCSV(filteredParticipants, filter); // Pasamos el filtro a generateCSV
+    const fileName = `participantes_${filter}.csv`;
+    downloadCSV(fileName, csvContent);
   } catch (error) {
     console.error('Error al generar el archivo CSV:', error);
     alert('Hubo un problema al generar el archivo CSV. Por favor, inténtalo de nuevo.');
@@ -44,13 +46,13 @@ export const handleDownloadCSV = (filteredParticipants, setLoading, generateCSV,
 };
 
 export const getCategory = (category) => {
-    if (category >= 0 && category <= 2) {
-      return 'Principiante';
-    } else if (category > 2 && category <= 4) {
-      return 'Intermedio';
-    } else if (category > 4) {
-      return 'Experto';
-    } else {
-      return 'Desconocido';
-    }
+  if (category >= 0 && category <= 2) {
+    return 'Principiante';
+  } else if (category > 2 && category <= 4) {
+    return 'Intermedio';
+  } else if (category > 4) {
+    return 'Experto';
+  } else {
+    return 'Desconocido';
+  }
 };

@@ -2,34 +2,46 @@ import { getCategory } from "../utils/participantsUtils";
 
 export const escapeCSVValue = (value) => `"${String(value).replace(/"/g, '""')}"`;
 
-export const generateCSV = (participants) => {
+// Función para calcular la edad
+const calculateAge = (birthDate) => {
+  const birth = new Date(birthDate);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+};
+
+// Función para filtrar participantes según la categoría seleccionada
+const filterParticipantsByCategory = (participants, filter) => {
+  return participants.filter(participant => {
+    const age = calculateAge(participant.birth_date);
+    const category = participant.category;
+
+    switch (filter) {
+      case "juveniles":
+        return age < 18;
+      case "principiantes":
+        return age >= 18 && age < 35 && category <= 2;
+      case "intermedios":
+        return age >= 18 && age < 35 && category > 2 && category <= 4;
+      case "avanzados":
+        return age >= 18 && age < 35 && category > 4;
+      case "masters":
+        return age >= 35;
+      default:
+        return true; // Sin filtro
+    }
+  });
+};
+
+export const generateCSV = (participants, filter) => {
   const headers = "ID,Weight,Name,Tiempo entrenando,Categoría,Academia,Edad,Aztlan ID,Payment Complete";
 
-  const calculateAge = (birthDate) => {
-    const birth = new Date(birthDate);
-    const today = new Date();
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-    return `${age} años`;
-  };
-
-  const filteredParticipants = participants.reduce((acc, participant) => {
-    const existingParticipantIndex = acc.findIndex(p =>
-      p.name === participant.name && p.academy === participant.academy);
-
-    if (existingParticipantIndex === -1) {
-      acc.push(participant);
-    } else {
-      const existingParticipant = acc[existingParticipantIndex];
-      if (participant.is_payment_complete && !existingParticipant.is_payment_complete) {
-        acc[existingParticipantIndex] = participant;
-      }
-    }
-    return acc;
-  }, []);
+  // Filtrar participantes según la categoría seleccionada
+  const filteredParticipants = filterParticipantsByCategory(participants, filter);
 
   return [
     headers,
@@ -39,9 +51,9 @@ export const generateCSV = (participants) => {
         participant.weight,
         participant.name,
         participant.category,
-        getCategory(participant.category), // Nuevo cálculo de categoría
+        getCategory(participant.category),
         participant.academy,
-        calculateAge(participant.birth_date),
+        `${calculateAge(participant.birth_date)} años`,
         participant.aztlan_id,
         participant.is_payment_complete,
       ].map(escapeCSVValue).join(',')
