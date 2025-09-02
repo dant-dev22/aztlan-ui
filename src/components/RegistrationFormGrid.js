@@ -18,21 +18,6 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
     });
   };
 
-  // Helper para calcular edad
-  const getAge = (birthDateStr) => {
-    if (!birthDateStr) return null;
-    const birthDate = new Date(birthDateStr);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  };
-
-  const age = getAge(formData.birth_date);
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -167,6 +152,10 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
             error={!!error?.belt}
           >
           <MenuItem value={"blanca"}>Blanca</MenuItem>
+          <MenuItem value={"azul"}>Azul</MenuItem>
+          <MenuItem value={"morada"}>Morada</MenuItem>
+          <MenuItem value={"cafe"}>Café</MenuItem>
+          <MenuItem value={"negra"}>Negra</MenuItem>
           <MenuItem value={"gris"}>Gris</MenuItem>
           <MenuItem value={"amarilla"}>Amarilla</MenuItem>
           <MenuItem value={"naranja"}>Naranja</MenuItem>
