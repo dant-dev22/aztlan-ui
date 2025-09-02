@@ -157,39 +157,23 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
         )}
       </Grid>
 
-      {/* Cinturón dependiente de edad */}
-      {formData.birth_date && (
-        <Grid item xs={12}>
-          <FormControl fullWidth variant="outlined" sx={inputStyles}>
-            <InputLabel id="belt-label">Cinta</InputLabel>
-            <Select
-              displayEmpty
-              name="belt"
-              value={formData.belt || ""}
-              onChange={handleChange}
-              error={!!error?.belt}
-            >
-              {age <= 15 ? (
-                <>
-                  <MenuItem value="blanco">Blanca</MenuItem>
-                  <MenuItem value="gris">Gris</MenuItem>
-                  <MenuItem value="amarillo">Amarilla</MenuItem>
-                  <MenuItem value="naranja">Naranja</MenuItem>
-                  <MenuItem value="verde">Verde</MenuItem>
-                </>
-              ) : (
-                <>
-                  <MenuItem value="blanco">Blanca</MenuItem>
-                  <MenuItem value="azul">Azul</MenuItem>
-                  <MenuItem value="morada">Morada</MenuItem>
-                  <MenuItem value="cafe">Café</MenuItem>
-                  <MenuItem value="negra">Negra</MenuItem>
-                </>
-              )}
-            </Select>
-          </FormControl>
-        </Grid>
-      )}
+      <Grid item xs={6}>
+        <FormControl fullWidth variant="outlined" sx={inputStyles}>
+          <InputLabel>Cinta</InputLabel>
+          <Select
+            name="belt"
+            value={formData.belt || "blanca"}
+            onChange={handleChange}
+            error={!!error?.belt}
+          >
+          <MenuItem value={"blanca"}>Blanca</MenuItem>
+          <MenuItem value={"gris"}>Gris</MenuItem>
+          <MenuItem value={"amarilla"}>Amarilla</MenuItem>
+          <MenuItem value={"naranja"}>Naranja</MenuItem>
+          <MenuItem value={"verde"}>Verde</MenuItem>  
+          </Select>
+        </FormControl>
+      </Grid>
     </Grid>
   );
 };
