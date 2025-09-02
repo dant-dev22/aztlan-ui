@@ -147,7 +147,7 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
           <InputLabel>Cinta</InputLabel>
           <Select
             name="belt"
-            value={formData.belt || "blanca"}
+            value={formData.belt}
             onChange={handleChange}
             error={!!error?.belt}
           >
