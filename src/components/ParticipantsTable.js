@@ -130,12 +130,11 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
-              <TableCell>Años entrenando</TableCell>
+              <TableCell>Meses entrenando</TableCell>
               <TableCell>Academia</TableCell>
               <TableCell>Aztlan ID</TableCell>
               <TableCell>Pago Completo</TableCell>
               <TableCell>Edad</TableCell>
-              <TableCell>Categoría</TableCell>
               <TableCell>Comprobante</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
@@ -144,6 +143,7 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
             {participants.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((participant) => (
               <TableRow key={participant.id}>
                 <TableCell>{participant.name}</TableCell>
+                <TableCell>{participant.experience}</TableCell>
                 <TableCell>{participant.academy}</TableCell>
                 <TableCell>{participant.aztlan_id}</TableCell>
                 <TableCell>
