@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
-import { getCategory } from '../utils/participantsUtils';
 
 const calculateAge = (birthDate) => {
   const birthDateObj = new Date(birthDate);
@@ -145,7 +144,6 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
             {participants.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((participant) => (
               <TableRow key={participant.id}>
                 <TableCell>{participant.name}</TableCell>
-                <TableCell>{participant.category}</TableCell>
                 <TableCell>{participant.academy}</TableCell>
                 <TableCell>{participant.aztlan_id}</TableCell>
                 <TableCell>
@@ -157,7 +155,6 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
                   />
                 </TableCell>
                 <TableCell>{calculateAge(participant.birth_date)} años</TableCell>
-                <TableCell>{getCategory(participant.category)}</TableCell>
                 <TableCell>
                   {paymentProofs[participant.aztlan_id] ? (
                     <a href={paymentProofs[participant.aztlan_id]} target="_blank" rel="noopener noreferrer">

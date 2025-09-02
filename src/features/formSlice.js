@@ -7,7 +7,8 @@ const initialState = {
     peso: "",
     academia: "",
     estatura: "",
-    categoria: "1",
+    cinturon: "blanco",
+    experiencia: "",
     comprobante: null,
   },
 };

@@ -20,7 +20,7 @@ const Form = ({ onBack }) => {
   };
 
   const validateForm = () => {
-    if (!formData.name || !formData.birth_date || !formData.weight || !formData.academy || !formData.height) {
+    if (!formData.name || !formData.birth_date || !formData.weight || !formData.academy || !formData.experience || !formData.belt) {
       return false;
     }
     return true;
@@ -49,8 +49,8 @@ const Form = ({ onBack }) => {
           birth_date: formData.birth_date,
           weight: formData.weight,
           academy: formData.academy,
-          height: formData.height,
-          category: formData.category || "1",
+          experience: formData.experience,
+          belt: formData.belt,
           payment_proof: formData.payment_proof || "", // Campo extra con valor nulo por defecto
           email: formData.email,
         }),

@@ -80,35 +80,29 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
       <Grid item xs={12}>
         <TextField
           fullWidth
-          label="Estatura"
-          name="height"
+          label="Experiencia"
+          name="experience"
           type="number"
-          value={formData.height}
+          value={formData.experience}
           onChange={handleChange}
-          error={!!error?.height}
-          helperText={error?.height}
+          error={!!error?.experience}
+          helperText={error?.experience}
           variant="outlined"
           sx={inputStyles}
         />
       </Grid>
 
       <Grid item xs={12}>
-        <Typography variant="body2" sx={{ display: 'block', marginTop: 0.5, color: 'text.secondary', textAlign: 'left' }}>
-          - Principiante (0-2 año(s)) <br />
-          - Intermedio (2-4 años) <br />
-          - Avanzado (más de 4 años)
-        </Typography>
         <FormControl fullWidth variant="outlined" sx={inputStyles}>
-          <InputLabel>Tiempo entrenando</InputLabel>
           <Select
-            name="category"
-            value={formData.category || "1"}
+            name="Cinturón"
+            value={formData.belt || "Blanco"}
             onChange={handleChange}
-            error={!!error?.category}
+            error={!!error?.belt}
           >
-            <MenuItem value={"1"}>Principiante</MenuItem>
-            <MenuItem value={"3"}>Intermedio</MenuItem>
-            <MenuItem value={"5"}>Avanzado</MenuItem>
+            <MenuItem value={"blanco"}>Blanco</MenuItem>
+            <MenuItem value={"azul"}>Azul</MenuItem>
+            <MenuItem value={"amarillo"}>Amarillo</MenuItem>
           </Select>
         </FormControl>
       </Grid>

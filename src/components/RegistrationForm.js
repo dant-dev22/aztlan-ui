@@ -45,7 +45,7 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
       }}
     >
       <Typography variant="h6" align="center" gutterBottom>
-        Registro Torneo Feb-2025
+        Registro y Participa
       </Typography>
 
       {error && (
