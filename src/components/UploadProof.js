@@ -65,7 +65,7 @@ const UploadProof = ({ onBack }) => {
       const API_URL = "https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws";
 
       await axios.post(
-        `${API_URL}/participants/${participantId}/upload`,
+        `${API_URL}/participants/${participantId}/payment-proof`,
         data,
         {
           headers: {
