@@ -106,7 +106,7 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
               name="experience_years"
               type="number"
               inputProps={{ min: 0 }}
-              value={formData.experience_years || 0}
+              value={formData.experience_years || ""}
               onChange={(e) => {
                 let val = parseInt(e.target.value || 0, 10);
                 if (val < 0) val = 0;
@@ -123,7 +123,7 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
               name="experience_months"
               type="number"
               inputProps={{ min: 0, max: 11 }}
-              value={formData.experience_months || 0}
+              value={formData.experience_months || ""}
               onChange={(e) => {
                 let val = parseInt(e.target.value || 0, 10);
                 if (val < 0) val = 0;
