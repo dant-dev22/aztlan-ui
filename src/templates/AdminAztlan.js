@@ -7,6 +7,7 @@ import {
   Box,
   Typography,
   Dialog,
+  DialogTitle,
   DialogContent,
   DialogActions,
   Select,
@@ -32,6 +33,7 @@ function AdminAztlan() {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(""); // Estado para el filtro seleccionado
+  const [openFilterDialog, setOpenFilterDialog] = useState(false); // Modal de filtro
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -67,6 +69,7 @@ function AdminAztlan() {
       return;
     }
     handleDownloadCSV(filteredParticipants, setLoading, generateCSV, downloadCSV, selectedFilter);
+    setOpenFilterDialog(false); // Cierra modal después de confirmar
   };
 
   return (
@@ -135,50 +138,64 @@ function AdminAztlan() {
             placeholder="Busca por nombre, academia o años entrenando"
           />
 
-          {/* Dropdown y botón en la misma fila */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-            {/* Dropdown compacto */}
-            <Select
-              value={selectedFilter}
-              onChange={(e) => setSelectedFilter(e.target.value)}
-              displayEmpty
-              sx={{
-                width: '200px', // Ancho reducido
-                backgroundColor: '#f5f5f5', // Fondo gris claro
-                borderRadius: '4px', // Bordes redondeados
-                '& .MuiSelect-select': {
-                  padding: '10px 32px 10px 12px', // Padding ajustado
-                },
-              }}
-              IconComponent={ArrowDropDownIcon} // Ícono personalizado
-            >
-              <MenuItem value={"blanca"} disabled >Selecciona un filtro</MenuItem>
-              <MenuItem value={"blanca"}>Blanca</MenuItem>
-              <MenuItem value={"azul"}>Azul</MenuItem>
-              <MenuItem value={"morada"}>Morada</MenuItem>
-              <MenuItem value={"cafe"}>Café</MenuItem>
-              <MenuItem value={"negra"}>Negra</MenuItem>
-              <MenuItem value={"gris"}>Gris</MenuItem>
-              <MenuItem value={"amarilla"}>Amarilla</MenuItem>
-              <MenuItem value={"naranja"}>Naranja</MenuItem>
-              <MenuItem value={"verde"}>Verde</MenuItem> 
-              <MenuItem value={"todos"}>Todos</MenuItem> 
-
-            </Select>
-
-            {/* Botón de descarga */}
+          {/* Botón que abre el modal */}
+          <Box sx={{ marginBottom: '1rem' }}>
             <Button
               variant="contained"
-              onClick={handleDownloadWithFilter}
+              onClick={() => setOpenFilterDialog(true)}
               sx={{
                 backgroundColor: "#FF5722",
-                padding: '10px 20px', // Padding ajustado
+                padding: '10px 20px',
               }}
-              disabled={loading || !selectedFilter}
+              disabled={loading}
             >
               {loading ? <CircularProgress size={24} /> : "Generar Lista"}
             </Button>
           </Box>
+
+          {/* Modal con el filtro */}
+          <Dialog open={openFilterDialog} onClose={() => setOpenFilterDialog(false)}>
+            <DialogTitle>Selecciona un filtro</DialogTitle>
+            <DialogContent>
+              <Select
+                value={selectedFilter}
+                onChange={(e) => setSelectedFilter(e.target.value)}
+                displayEmpty
+                sx={{
+                  width: '200px',
+                  backgroundColor: '#f5f5f5',
+                  borderRadius: '4px',
+                  marginTop: '1rem',
+                  '& .MuiSelect-select': {
+                    padding: '10px 32px 10px 12px',
+                  },
+                }}
+                IconComponent={ArrowDropDownIcon}
+              >
+                <MenuItem value="" disabled>Selecciona un filtro</MenuItem>
+                <MenuItem value={"blanca"}>Blanca</MenuItem>
+                <MenuItem value={"azul"}>Azul</MenuItem>
+                <MenuItem value={"morada"}>Morada</MenuItem>
+                <MenuItem value={"cafe"}>Café</MenuItem>
+                <MenuItem value={"negra"}>Negra</MenuItem>
+                <MenuItem value={"gris"}>Gris</MenuItem>
+                <MenuItem value={"amarilla"}>Amarilla</MenuItem>
+                <MenuItem value={"naranja"}>Naranja</MenuItem>
+                <MenuItem value={"verde"}>Verde</MenuItem>
+                <MenuItem value={"todos"}>Todos</MenuItem>
+              </Select>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenFilterDialog(false)}>Cancelar</Button>
+              <Button
+                onClick={handleDownloadWithFilter}
+                variant="contained"
+                disabled={!selectedFilter || loading}
+              >
+                {loading ? <CircularProgress size={24} /> : "Confirmar"}
+              </Button>
+            </DialogActions>
+          </Dialog>
 
           {loading ? (
             <CircularProgress />
