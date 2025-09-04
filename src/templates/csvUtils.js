@@ -1,69 +1,57 @@
-import { getCategory } from "../utils/participantsUtils";
-
 export const escapeCSVValue = (value) => `"${String(value).replace(/"/g, '""')}"`;
 
-// Función para calcular la edad
-const calculateAge = (birthDate) => {
-  const birth = new Date(birthDate);
+export const calculateAge = (birthDate) => {
+  const birthDateObj = new Date(birthDate);
   const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const monthDiff = today.getMonth() - birth.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+  let age = today.getFullYear() - birthDateObj.getFullYear();
+  const month = today.getMonth();
+  const day = today.getDate();
+
+  if (month < birthDateObj.getMonth() || (month === birthDateObj.getMonth() && day < birthDateObj.getDate())) {
     age--;
   }
+
   return age;
 };
 
-// Función para filtrar participantes según la categoría seleccionada
-const filterParticipantsByCategory = (participants, filter) => {
+export const timeToYears = (experience) => {
+  const years = Math.floor(experience / 12); // cuántos años completos caben
+  const months = experience % 12; // lo que sobra
+  return `${years} años, ${months} meses`;
+}; 
+// Función para filtrar participantes según la cinta seleccionada
+const filterParticipantsByBelt = (participants, filter) => {
   if (filter === "todos") {
-   return participants; 
+    return participants;
   }
-  return participants.filter(participant => {
-    const age = calculateAge(participant.birth_date);
-    const category = participant.category;
-
-    switch (filter) {
-      case "juveniles":
-        return age < 18;
-      case "principiantes":
-        return age >= 18 && age < 35 && category <= 2;
-      case "intermedios":
-        return age >= 18 && age < 35 && category > 2 && category <= 4;
-      case "avanzados":
-        return age >= 18 && age < 35 && category > 4;
-      case "masters":
-        return age >= 35;
-      default:
-        return true; // Sin filtro
-    }
-  });
+  return participants.filter(participant => participant.belt === filter);
 };
 
+// Generar CSV con participantes filtrados por cinta
 export const generateCSV = (participants, filter) => {
-  const headers = "ID,Weight,Name,Tiempo entrenando,Categoría,Academia,Edad,Aztlan ID,Payment Complete";
+  const headers = "ID,Peso,Nombre,Tiempo entrenando,Cinta,Academia,Edad,Payment Complete";
 
-  // Filtrar participantes según la categoría seleccionada
-  const filteredParticipants = filterParticipantsByCategory(participants, filter);
+  // Filtrar participantes según la cinta seleccionada
+  const filteredParticipants = filterParticipantsByBelt(participants, filter);
 
   return [
     headers,
     ...filteredParticipants.map(participant =>
       [
-        participant.id,
+        participant.aztlan_id,
         participant.weight,
         participant.name,
-        participant.category,
-        getCategory(participant.category),
+        participant.experience,        // Mantener "Tiempo entrenando" si es lo que representa category
+        participant.belt,            // Columna "Cinta"
         participant.academy,
         `${calculateAge(participant.birth_date)} años`,
-        participant.aztlan_id,
         participant.is_payment_complete,
       ].map(escapeCSVValue).join(',')
     )
   ].join('\n');
 };
 
+// Descargar CSV en el navegador
 export const downloadCSV = (filename, csvContent) => {
   const blob = new Blob([csvContent], { type: 'text/csv' });
   const link = document.createElement('a');

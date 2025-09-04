@@ -152,13 +152,18 @@ function AdminAztlan() {
               }}
               IconComponent={ArrowDropDownIcon} // Ícono personalizado
             >
-              <MenuItem value="" disabled>Selecciona un filtro</MenuItem>
-              <MenuItem value="juveniles">Juveniles e Infantiles</MenuItem>
-              <MenuItem value="principiantes">Principiantes</MenuItem>
-              <MenuItem value="intermedios">Intermedios</MenuItem>
-              <MenuItem value="avanzados">Avanzados</MenuItem>
-              <MenuItem value="masters">Masters</MenuItem>
-              <MenuItem value="todos">todos</MenuItem>
+              <MenuItem value={"blanca"} disabled >Selecciona un filtro</MenuItem>
+              <MenuItem value={"blanca"}>Blanca</MenuItem>
+              <MenuItem value={"azul"}>Azul</MenuItem>
+              <MenuItem value={"morada"}>Morada</MenuItem>
+              <MenuItem value={"cafe"}>Café</MenuItem>
+              <MenuItem value={"negra"}>Negra</MenuItem>
+              <MenuItem value={"gris"}>Gris</MenuItem>
+              <MenuItem value={"amarilla"}>Amarilla</MenuItem>
+              <MenuItem value={"naranja"}>Naranja</MenuItem>
+              <MenuItem value={"verde"}>Verde</MenuItem> 
+              <MenuItem value={"todos"}>Todos</MenuItem> 
+
             </Select>
 
             {/* Botón de descarga */}
@@ -171,7 +176,7 @@ function AdminAztlan() {
               }}
               disabled={loading || !selectedFilter}
             >
-              {loading ? <CircularProgress size={24} /> : "Descargar CSV"}
+              {loading ? <CircularProgress size={24} /> : "Generar Lista"}
             </Button>
           </Box>
 

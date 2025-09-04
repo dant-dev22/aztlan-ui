@@ -1,20 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
-
-const calculateAge = (birthDate) => {
-  const birthDateObj = new Date(birthDate);
-  const today = new Date();
-  let age = today.getFullYear() - birthDateObj.getFullYear();
-  const month = today.getMonth();
-  const day = today.getDate();
-
-  if (month < birthDateObj.getMonth() || (month === birthDateObj.getMonth() && day < birthDateObj.getDate())) {
-    age--;
-  }
-
-  return age;
-};
+import { timeToYears, calculateAge } from '../templates/csvUtils';
 
 const ParticipantsTable = ({ participants, setParticipants }) => {
   const [paymentProofs, setPaymentProofs] = useState({});
@@ -122,6 +109,8 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  
+
 
   return (
     <Container>
@@ -130,7 +119,9 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
-              <TableCell>Meses entrenando</TableCell>
+              <TableCell>Experiencia</TableCell>
+              <TableCell>Cinta</TableCell>
+              <TableCell>Peso</TableCell>
               <TableCell>Academia</TableCell>
               <TableCell>Aztlan ID</TableCell>
               <TableCell>Pago Completo</TableCell>
@@ -143,7 +134,9 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
             {participants.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((participant) => (
               <TableRow key={participant.id}>
                 <TableCell>{participant.name}</TableCell>
-                <TableCell>{participant.experience}</TableCell>
+                <TableCell>{timeToYears(participant.experience)}</TableCell>
+                <TableCell>{participant.belt}</TableCell>
+                <TableCell>{participant.weight}</TableCell>
                 <TableCell>{participant.academy}</TableCell>
                 <TableCell>{participant.aztlan_id}</TableCell>
                 <TableCell>
