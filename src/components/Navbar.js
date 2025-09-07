@@ -1,30 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, IconButton, Menu, MenuItem, Box, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import { AppBar, Toolbar, Box, Typography } from "@mui/material";
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <AppBar
-      position="fixed"       // <--- fijo sobre la ventana
-      elevation={0}          // quita sombra
+      position="fixed" // fijo sobre la ventana
+      elevation={0} // quita sombra
       sx={{
         top: 0,
         left: 0,
         width: "100%",
         backgroundColor: "transparent", // fondo transparente
         boxShadow: "none",
-        zIndex: 1000,         // <--- encima de todo
+        zIndex: 1000, // encima de todo
       }}
     >
       <Toolbar
@@ -34,7 +23,8 @@ const Navbar = () => {
           flexWrap: "wrap",
         }}
       >
-        {/* Botón de hamburguesa para dispositivos móviles */}
+        {/*
+        --- Botón de hamburguesa comentado ---
         <Box
           sx={{
             display: { xs: "block", sm: "none" },
@@ -44,7 +34,15 @@ const Navbar = () => {
         >
           <IconButton
             edge="start"
-            sx={{ color: "white" }}
+            sx={{
+              color: "white",
+              filter: "drop-shadow(0 0 6px rgba(0,0,0,0.8))",
+              "&:hover": {
+                color: "#FF5722",
+                filter: "drop-shadow(0 0 8px #FF5722)",
+                transform: "scale(1.2)",
+              },
+            }}
             onClick={handleMenuOpen}
           >
             <MenuIcon />
@@ -69,13 +67,13 @@ const Navbar = () => {
             </MenuItem>
           </Menu>
         </Box>
+        */}
 
         {/* Menú de navegación para pantallas grandes */}
-        <Box sx={{ display: { xs: "none", sm: "flex" } }}>
-          <Link
-            to="/"
-            style={{ textDecoration: "none", margin: "0 1rem" }}
-          >
+        <Box sx={{ display: "flex" }}>
+          {/*
+          --- Opción de Registro comentada ---
+          <Link to="/" style={{ textDecoration: "none", margin: "0 1rem" }}>
             <Typography
               variant="body1"
               sx={{
@@ -91,6 +89,8 @@ const Navbar = () => {
               Registro
             </Typography>
           </Link>
+          */}
+
           <Link
             to="/aztlan-2024"
             style={{ textDecoration: "none", margin: "0 1rem" }}
