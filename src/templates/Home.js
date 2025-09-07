@@ -1,20 +1,7 @@
 import React, { useState } from "react";
 import Form from "../components/Form";
 import UploadProof from "../components/UploadProof";
-import logo from "../assets/img/aztlannobg.png"; 
 import { Box, Button, Typography } from "@mui/material";
-import { keyframes } from "@emotion/react";
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
 
 const Home = () => {
   const [view, setView] = useState("menu");
@@ -26,74 +13,98 @@ const Home = () => {
   return (
     <Box
       sx={{
-        padding: "2rem",
-        fontFamily: "Arial, sans-serif",
-        transition: "opacity 0.5s ease-in-out",
-        textAlign: "center",
+        position: "relative",
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
       }}
     >
+      {/* Imagen de fondo */}
+      <Box
+        component="img"
+        src="https://aztlang-grappling-images.s3.us-east-1.amazonaws.com/assets/bg-image-aztlan.jpeg"
+        alt="Aztlan Grappling Background"
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: -1,
+          opacity: 0.9, // puedes ajustar la opacidad si quieres resaltar los botones
+        }}
+      />
+
+      {/* Contenido principal */}
       <Box
         sx={{
-          textAlign: "center",
+          position: "relative",
           width: "100%",
-          maxWidth: "20rem",
-          margin: "0 auto",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          color: "#fff",
+          backdropFilter: "brightness(0.9)", // mejora contraste del texto con fondo
         }}
       >
-        <img
-          src={logo}
-          alt="Aztlan Grappling Logo"
-          style={{
-            width: "100%",
-            height: "auto",
-          }}
-        />
-      </Box>
+        <Typography
+          variant="h3"
+          sx={{ mb: 4, fontWeight: "bold", textShadow: "2px 2px 4px rgba(0,0,0,0.7)" }}
+        >
+          Aztlan Grappling 2025
+        </Typography>
 
-      <Typography variant="h4" sx={{ color: "#1C1C1C", margin: "1rem 0", animation: `${fadeIn} 1s ease-in-out`,}}>
-        Aztlan Grappling 2025
-      </Typography>
-
-      {view === "menu" && (
-        <Box>
-          <Button
-            variant="contained"
+        {view === "menu" && (
+          <Box
             sx={{
-              padding: "1rem 2rem",
-              margin: "1rem",
-              backgroundColor: "#FF5722",
-              color: "white",
-              borderRadius: "4px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "2rem", // separación entre botones
             }}
-            onClick={() => handleViewChange("register")}
           >
-            Registrarse
-          </Button>
-
-          <Box sx={{ margin: "1rem 0" }}>
-            <Typography variant="body1" sx={{ color: "#333" }}>
-              ¿No has subido tu comprobante? Completa tu registro subiendo tu comprobante aquí:
-            </Typography>
             <Button
               variant="contained"
               sx={{
                 padding: "1rem 2rem",
-                margin: "1rem",
+                backgroundColor: "#FF5722",
+                color: "white",
+                borderRadius: "8px",
+                fontSize: "1rem",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+              }}
+              onClick={() => handleViewChange("register")}
+            >
+              Registrarse
+            </Button>
+
+            <Button
+              variant="contained"
+              sx={{
+                padding: "1rem 2rem",
                 backgroundColor: "#FFC107",
                 color: "white",
-                borderRadius: "4px",
+                borderRadius: "8px",
+                fontSize: "1rem",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
               }}
               onClick={() => handleViewChange("uploadProof")}
             >
-              Subir Comprobante
+              Terminar Registro
             </Button>
           </Box>
+        )}
 
-        </Box>
-      )}
-
-      {view === "register" && <Form onBack={() => handleViewChange("menu")} />}
-      {view === "uploadProof" && <UploadProof onBack={() => handleViewChange("menu")} />}
+        {view === "register" && (
+          <Form onBack={() => handleViewChange("menu")} />
+        )}
+        {view === "uploadProof" && (
+          <UploadProof onBack={() => handleViewChange("menu")} />
+        )}
+      </Box>
     </Box>
   );
 };
