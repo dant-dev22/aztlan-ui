@@ -11,7 +11,7 @@ const MotionBox = motion(Box);
 
 const Home = () => {
   const [view, setView] = useState("menu");
-  const [interacted, setInteracted] = useState(false); // para botón bounce
+  const [interacted, setInteracted] = useState(false);
   const controls1 = useAnimation();
   const controls2 = useAnimation();
 
@@ -19,31 +19,21 @@ const Home = () => {
 
   const title = "Torneo Aztlán 2025";
 
-  // Título pulse (emotion keyframes)
+  // Pulse del título
   const pulseDuration = 8.2;
   const stagger = 0.06;
   const pulse = useMemo(
     () => keyframes`
-      0% {
-        transform: scale(1);
-        text-shadow: 0 0 0 rgba(0,0,0,0);
-      }
-      45% {
-        transform: scale(1.32);
-        text-shadow: 0 8px 9px black, 0 2px 6px orange;
-      }
-      100% {
-        transform: scale(1);
-        text-shadow: 0 0 0 rgba(0,0,0,0);
-      }
+      0% { transform: scale(1); text-shadow: 0 0 0 rgba(0,0,0,0); }
+      45% { transform: scale(1.32); text-shadow: 0 8px 9px black, 0 2px 6px orange; }
+      100% { transform: scale(1); text-shadow: 0 0 0 rgba(0,0,0,0); }
     `,
     []
   );
 
-  // reduced-motion check
   const shouldReduceMotion = useReducedMotion();
 
-  // Bounce logic (igual que antes)
+  // Botones bounce
   useEffect(() => {
     if (shouldReduceMotion) return;
 
@@ -75,7 +65,6 @@ const Home = () => {
     };
   }, [view, interacted, controls1, controls2, shouldReduceMotion]);
 
-  // Detectar interacción "real"
   useEffect(() => {
     if (interacted) return;
     const stop = () => {
@@ -102,14 +91,13 @@ const Home = () => {
     handleViewChange(nextView);
   };
 
-  // Variants para los paneles (Form / UploadProof)
   const panelVariants = {
     hidden: { opacity: 0, y: 18, scale: 0.985 },
     visible: { opacity: 1, y: 0, scale: 1 },
     exit: { opacity: 0, y: -10, scale: 0.99 },
   };
 
-  const panelTransition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] }; // suave
+  const panelTransition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] };
 
   return (
     <Box
@@ -137,7 +125,7 @@ const Home = () => {
         }}
       />
 
-      {/* Contenido principal */}
+      {/* Contenedor principal con título + espacio reservado */}
       <Box
         sx={{
           position: "relative",
@@ -153,126 +141,126 @@ const Home = () => {
           px: 2,
         }}
       >
-        {/* Título: letra por letra con pulse */}
-        <Typography
-          variant="h3"
-          component="h1"
-          aria-label={title}
+        {/* Contenedor que reserva espacio para paneles */}
+        <Box
           sx={{
-            mb: 4,
-            fontWeight: 700,
-            fontFamily: '"League Spartan", "Roboto", sans-serif',
-            fontSize: "3rem",
-            display: "inline-block",
-            whiteSpace: "nowrap",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            minHeight: 320, // <- ajusta según tamaño del título + panel para evitar salto
           }}
         >
-          <Box component="span" sx={{ display: "inline-block", lineHeight: 1 }}>
-            {Array.from(title).map((char, i) => {
-              const isSpace = char === " ";
-              const delay = (i * stagger).toFixed(3) + "s";
-              const letterSx = {
-                display: "inline-block",
-                transformOrigin: "center center",
-                animation: isSpace ? "none" : `${pulse} ${pulseDuration}s cubic-bezier(.4,.0,.2,1) ${delay} infinite`,
-                willChange: "transform, text-shadow",
-                fontSize: { xs: "1.6rem", sm: "2rem", md: "3.5rem" },
-                marginRight: isSpace ? "0.45rem" : 0,
-                fontFamily: '"League Spartan", "Roboto", sans-serif',
-                color: "white",
-                WebkitFontSmoothing: "antialiased",
-                MozOsxFontSmoothing: "grayscale",
-              };
-              return (
-                <Box component="span" key={`char-${i}-${char}`} aria-hidden="true" sx={letterSx}>
-                  {char === " " ? "\u00A0" : char}
-                </Box>
-              );
-            })}
-          </Box>
-        </Typography>
+          {/* Título */}
+          <Typography
+            variant="h3"
+            component="h1"
+            aria-label={title}
+            sx={{
+              mb: 4,
+              fontWeight: 700,
+              fontFamily: '"League Spartan", "Roboto", sans-serif',
+              fontSize: "3rem",
+              display: "inline-block",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <Box component="span" sx={{ display: "inline-block", lineHeight: 1 }}>
+              {Array.from(title).map((char, i) => {
+                const isSpace = char === " ";
+                const delay = (i * stagger).toFixed(3) + "s";
+                const letterSx = {
+                  display: "inline-block",
+                  transformOrigin: "center center",
+                  animation: isSpace ? "none" : `${pulse} ${pulseDuration}s cubic-bezier(.4,.0,.2,1) ${delay} infinite`,
+                  willChange: "transform, text-shadow",
+                  fontSize: { xs: "1.6rem", sm: "2rem", md: "3.5rem" },
+                  marginRight: isSpace ? "0.45rem" : 0,
+                  fontFamily: '"League Spartan", "Roboto", sans-serif',
+                  color: "white",
+                  WebkitFontSmoothing: "antialiased",
+                  MozOsxFontSmoothing: "grayscale",
+                };
+                return (
+                  <Box component="span" key={`char-${i}-${char}`} aria-hidden="true" sx={letterSx}>
+                    {char === " " ? "\u00A0" : char}
+                  </Box>
+                );
+              })}
+            </Box>
+          </Typography>
 
-        {/* Menu */}
-        {view === "menu" && (
-          <Box sx={{ display: "flex", justifyContent: "center", gap: "2rem" }}>
-            <MotionButton
-              variant="contained"
-              onClick={() => handleButtonClick("register")}
-              animate={controls1}
-              sx={{
-                padding: "1rem 2rem",
-                backgroundColor: "#FF5722",
-                color: "white",
-                borderRadius: "8px",
-                fontSize: "1rem",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-                ...(shouldReduceMotion && { transform: "none" }),
-                willChange: "transform",
-              }}
-            >
-              Registrarse
-            </MotionButton>
+          {/* Menu */}
+          {view === "menu" && (
+            <Box sx={{ display: "flex", justifyContent: "center", gap: "2rem" }}>
+              <MotionButton
+                variant="contained"
+                onClick={() => handleButtonClick("register")}
+                animate={controls1}
+                sx={{
+                  padding: "1rem 2rem",
+                  backgroundColor: "#FF5722",
+                  color: "white",
+                  borderRadius: "8px",
+                  fontSize: "1rem",
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                  ...(shouldReduceMotion && { transform: "none" }),
+                  willChange: "transform",
+                }}
+              >
+                Registrarse
+              </MotionButton>
 
-            <MotionButton
-              variant="contained"
-              onClick={() => handleButtonClick("uploadProof")}
-              animate={controls2}
-              sx={{
-                padding: "1rem 2rem",
-                backgroundColor: "#1976D2",
-                color: "white",
-                borderRadius: "8px",
-                fontSize: "1rem",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-                ...(shouldReduceMotion && { transform: "none" }),
-                willChange: "transform",
-              }}
-            >
-              Terminar Registro
-            </MotionButton>
-          </Box>
-        )}
-
-        {/* Aquí usamos AnimatePresence para que Form y UploadProof animen igual */}
-        <AnimatePresence mode="wait" initial={false}>
-          {view === "register" && (
-            <MotionBox
-              key="register-panel"
-              initial={shouldReduceMotion ? false : "hidden"}
-              animate={shouldReduceMotion ? false : "visible"}
-              exit={shouldReduceMotion ? false : "exit"}
-              variants={panelVariants}
-              transition={panelTransition}
-              sx={{
-                mt: 4,
-                width: "100%",
-                maxWidth: 760,
-                px: 2,
-              }}
-            >
-              <Form onBack={() => handleViewChange("menu")} />
-            </MotionBox>
+              <MotionButton
+                variant="contained"
+                onClick={() => handleButtonClick("uploadProof")}
+                animate={controls2}
+                sx={{
+                  padding: "1rem 2rem",
+                  backgroundColor: "#1976D2",
+                  color: "white",
+                  borderRadius: "8px",
+                  fontSize: "1rem",
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                  ...(shouldReduceMotion && { transform: "none" }),
+                  willChange: "transform",
+                }}
+              >
+                Terminar Registro
+              </MotionButton>
+            </Box>
           )}
 
-          {view === "uploadProof" && (
-            <MotionBox
-              key="upload-panel"
-              initial={shouldReduceMotion ? false : "hidden"}
-              animate={shouldReduceMotion ? false : "visible"}
-              exit={shouldReduceMotion ? false : "exit"}
-              variants={panelVariants}
-              transition={panelTransition}
-              sx={{
-                mt: 4,
-                width: "100%",
-                maxWidth: 760,
-                px: 2,
-              }}
-            >
-              <UploadProof onBack={() => handleViewChange("menu")} />
-            </MotionBox>
-          )}
-        </AnimatePresence>
+          {/* Paneles animados */}
+          <AnimatePresence mode="wait" initial={false}>
+            {view === "register" && (
+              <MotionBox
+                key="register-panel"
+                initial={shouldReduceMotion ? false : "hidden"}
+                animate={shouldReduceMotion ? false : "visible"}
+                exit={shouldReduceMotion ? false : "exit"}
+                variants={panelVariants}
+                transition={panelTransition}
+                sx={{ mt: 2, width: "100%", maxWidth: 760, px: 2 }}
+              >
+                <Form onBack={() => handleViewChange("menu")} />
+              </MotionBox>
+            )}
+
+            {view === "uploadProof" && (
+              <MotionBox
+                key="upload-panel"
+                initial={shouldReduceMotion ? false : "hidden"}
+                animate={shouldReduceMotion ? false : "visible"}
+                exit={shouldReduceMotion ? false : "exit"}
+                variants={panelVariants}
+                transition={panelTransition}
+                sx={{ mt: 2, width: "100%", maxWidth: 760, px: 2 }}
+              >
+                <UploadProof onBack={() => handleViewChange("menu")} />
+              </MotionBox>
+            )}
+          </AnimatePresence>
+        </Box>
       </Box>
     </Box>
   );
