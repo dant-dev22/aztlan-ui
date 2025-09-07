@@ -10,10 +10,7 @@ import Footer from "./components/Footer"; // Importar el Footer
 function App() {
   return (
     <div className="App">
-      {/* Header con el Navbar */}
-      <header>
         <Navbar />
-      </header>
 
       {/* Body de la aplicación */}
       <main>

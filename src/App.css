@@ -23,7 +23,7 @@
 }
 
 .App-header {
-  background-color: #F5F5F5;
+  background-color: transparent;
   min-height: 100vh;
   animation: fadeIn 0.5s ease-in-out;
   display: flex;
@@ -45,4 +45,19 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Reset del body y html */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: transparent; /* fondo transparente */
+  font-family: Arial, sans-serif;
+}
+
+/* Opcional: box-sizing global */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
