@@ -1,12 +1,19 @@
 // Home.js
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Form from "../components/Form";
 import UploadProof from "../components/UploadProof";
 import { Box, Button, Typography } from "@mui/material";
 import { keyframes } from "@emotion/react";
+import { motion, useAnimation } from "framer-motion";
+
+const MotionButton = motion(Button);
 
 const Home = () => {
   const [view, setView] = useState("menu");
+  const [interacted, setInteracted] = useState(false); // marca si usuario interactuó
+  const controls1 = useAnimation();
+  const controls2 = useAnimation();
+
   const handleViewChange = (newView) => setView(newView);
 
   const title = "Torneo Aztlán 2025";
@@ -15,7 +22,7 @@ const Home = () => {
   const pulseDuration = 8.2; // segundos por ciclo
   const stagger = 0.06; // segundos entre letras
 
-  // keyframes del pulso: escala y sombra
+  // keyframes del pulso: escala y sombra (usando emotion)
   const pulse = useMemo(
     () => keyframes`
       0% {
@@ -24,7 +31,7 @@ const Home = () => {
       }
       45% {
         transform: scale(1.32);
-        text-shadow: 0 8px 9px black, 0 2px 6px orange;
+        text-shadow: 0 8px 19px gray, 0 2px 6px orange;
       }
       100% {
         transform: scale(1);
@@ -33,6 +40,81 @@ const Home = () => {
     `,
     []
   );
+
+  // Detecta preferencia de reduced-motion (segura con SSR)
+  const prefersReducedMotion =
+    typeof window !== "undefined" && window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false;
+
+  // Inicia la animación con framer-motion tras 3s sin interacción
+  useEffect(() => {
+    if (prefersReducedMotion) return; // no animar si el usuario lo pidió
+
+    let timer;
+    let stopTimeout;
+
+    if (view === "menu" && !interacted) {
+      timer = setTimeout(() => {
+        // Inicio de la secuencia: cada control hará 3 saltos (repeat: 2 -> total 3 ejecuciones)
+        controls1.start({
+          y: [0, -8, 0],
+          scale: [1, 1.02, 1],
+          transition: { duration: 0.9, ease: "easeInOut", repeat: 2, repeatDelay: 0 },
+        });
+
+        controls2.start({
+          y: [0, -8, 0],
+          scale: [1, 1.02, 1],
+          transition: { duration: 0.9, ease: "easeInOut", repeat: 2, repeatDelay: 0, delay: 0.18 },
+        });
+
+        // Después de ~ (0.9 * 3) segundos + small buffer, forzamos stop y marcamos interacción para no re-trigger
+        stopTimeout = setTimeout(() => {
+          controls1.stop();
+          controls2.stop();
+          setInteracted(true); // evitar que la animación vuelva a dispararse
+        }, (0.9 * 3) * 1000 + 250);
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(stopTimeout);
+    };
+  }, [view, interacted, controls1, controls2, prefersReducedMotion]);
+
+  // Listeners para detectar interacción "real" (no mousemove)
+  useEffect(() => {
+    if (interacted) return;
+
+    const stop = () => {
+      // Detenemos animaciones y marcamos que hubo interacción
+      controls1.stop();
+      controls2.stop();
+      setInteracted(true);
+    };
+
+    window.addEventListener("scroll", stop, { passive: true });
+    window.addEventListener("touchstart", stop, { passive: true });
+    window.addEventListener("pointerdown", stop, { passive: true });
+    window.addEventListener("keydown", stop, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", stop);
+      window.removeEventListener("touchstart", stop);
+      window.removeEventListener("pointerdown", stop);
+      window.removeEventListener("keydown", stop);
+    };
+  }, [interacted, controls1, controls2]);
+
+  // Click en botón: marca interacción, detiene animaciones y cambia vista
+  const handleButtonClick = (nextView) => {
+    controls1.stop();
+    controls2.stop();
+    setInteracted(true);
+    handleViewChange(nextView);
+  };
 
   return (
     <Box
@@ -84,53 +166,34 @@ const Home = () => {
           sx={{
             mb: 4,
             fontWeight: "700",
-            fontFamily: '"League Spartan", "Roboto", sans-serif', // <- aquí
-            fontSize: '3rem',
+            fontFamily: '"League Spartan", "Roboto", sans-serif',
+            fontSize: "3rem",
             display: "inline-block",
             whiteSpace: "nowrap",
           }}
         >
-          <Box
-            component="span"
-            sx={{
-              // contenedor inline para las letras
-              display: "inline-block",
-              lineHeight: 1,
-            }}
-          >
+          <Box component="span" sx={{ display: "inline-block", lineHeight: 1 }}>
             {Array.from(title).map((char, i) => {
               const isSpace = char === " ";
-              // delay escalonado por índice (puedes usar negative delays si quieres fase adelantada)
               const delay = (i * stagger).toFixed(3) + "s";
 
-              // estilos por letra
               const letterSx = {
                 display: "inline-block",
                 transformOrigin: "center center",
-                // aplica la animación solo si no es espacio
                 animation: isSpace
                   ? "none"
                   : `${pulse} ${pulseDuration}s cubic-bezier(.4,.0,.2,1) ${delay} infinite`,
                 willChange: "transform, text-shadow",
-                // tamaño y espaciado (ajusta según tu tipografía)
                 fontSize: { xs: "1.6rem", sm: "2rem", md: "3.5rem" },
                 marginRight: isSpace ? "0.45rem" : 0,
                 fontFamily: '"League Spartan", "Roboto", sans-serif',
-                // color y sombra base (sutileza)
                 color: "white",
-                // suaviza el borde de la letra para el transform
                 WebkitFontSmoothing: "antialiased",
                 MozOsxFontSmoothing: "grayscale",
               };
 
-              // para accesibilidad: cada span visual debe ser aria-hidden para no leer letra por letra
               return (
-                <Box
-                  component="span"
-                  key={`char-${i}-${char}`}
-                  aria-hidden="true"
-                  sx={letterSx}
-                >
+                <Box component="span" key={`char-${i}-${char}`} aria-hidden="true" sx={letterSx}>
                   {char === " " ? "\u00A0" : char}
                 </Box>
               );
@@ -140,8 +203,10 @@ const Home = () => {
 
         {view === "menu" && (
           <Box sx={{ display: "flex", justifyContent: "center", gap: "2rem" }}>
-            <Button
+            <MotionButton
               variant="contained"
+              onClick={() => handleButtonClick("register")}
+              animate={controls1}
               sx={{
                 padding: "1rem 2rem",
                 backgroundColor: "#FF5722",
@@ -149,14 +214,18 @@ const Home = () => {
                 borderRadius: "8px",
                 fontSize: "1rem",
                 boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                // Respeta reduced-motion: no animar si user lo pidió
+                ...(prefersReducedMotion && { transform: "none" }),
+                willChange: "transform",
               }}
-              onClick={() => handleViewChange("register")}
             >
               Registrarse
-            </Button>
+            </MotionButton>
 
-            <Button
+            <MotionButton
               variant="contained"
+              onClick={() => handleButtonClick("uploadProof")}
+              animate={controls2}
               sx={{
                 padding: "1rem 2rem",
                 backgroundColor: "#1976D2",
@@ -164,11 +233,12 @@ const Home = () => {
                 borderRadius: "8px",
                 fontSize: "1rem",
                 boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                ...(prefersReducedMotion && { transform: "none" }),
+                willChange: "transform",
               }}
-              onClick={() => handleViewChange("uploadProof")}
             >
               Terminar Registro
-            </Button>
+            </MotionButton>
           </Box>
         )}
 
