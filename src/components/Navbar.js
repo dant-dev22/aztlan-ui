@@ -15,11 +15,22 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#f5f5f5" }}> {/* Gris claro */}
+    <AppBar
+      position="fixed"       // <--- fijo sobre la ventana
+      elevation={0}          // quita sombra
+      sx={{
+        top: 0,
+        left: 0,
+        width: "100%",
+        backgroundColor: "transparent", // fondo transparente
+        boxShadow: "none",
+        zIndex: 1000,         // <--- encima de todo
+      }}
+    >
       <Toolbar
         sx={{
           display: "flex",
-          justifyContent: "center", // Centrar el contenido
+          justifyContent: "center",
           flexWrap: "wrap",
         }}
       >
@@ -33,7 +44,7 @@ const Navbar = () => {
         >
           <IconButton
             edge="start"
-            sx={{ color: "black" }} // Botón de hamburguesa negro
+            sx={{ color: "white" }}
             onClick={handleMenuOpen}
           >
             <MenuIcon />
@@ -63,25 +74,39 @@ const Navbar = () => {
         <Box sx={{ display: { xs: "none", sm: "flex" } }}>
           <Link
             to="/"
-            style={{
-              textDecoration: "none",
-              color: "white",
-              margin: "0 1rem",
-            }}
+            style={{ textDecoration: "none", margin: "0 1rem" }}
           >
-            <Typography variant="body1" sx={{ color: "black" }}>
+            <Typography
+              variant="body1"
+              sx={{
+                color: "white",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  color: "#FF5722",
+                  textShadow: "0 0 8px #FF5722",
+                  transform: "scale(1.1)",
+                },
+              }}
+            >
               Registro
             </Typography>
           </Link>
           <Link
             to="/aztlan-2024"
-            style={{
-              textDecoration: "none",
-              color: "white",
-              margin: "0 1rem",
-            }}
+            style={{ textDecoration: "none", margin: "0 1rem" }}
           >
-            <Typography variant="body1" sx={{ color: "black" }}>
+            <Typography
+              variant="body1"
+              sx={{
+                color: "white",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  color: "#FFC107",
+                  textShadow: "0 0 8px #FFC107",
+                  transform: "scale(1.1)",
+                },
+              }}
+            >
               Aztlan 2024
             </Typography>
           </Link>
@@ -89,7 +114,6 @@ const Navbar = () => {
       </Toolbar>
     </AppBar>
   );
-
-  };
+};
 
 export default Navbar;
