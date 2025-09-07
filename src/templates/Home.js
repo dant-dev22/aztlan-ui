@@ -4,13 +4,14 @@ import Form from "../components/Form";
 import UploadProof from "../components/UploadProof";
 import { Box, Button, Typography } from "@mui/material";
 import { keyframes } from "@emotion/react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, useAnimation, AnimatePresence, useReducedMotion } from "framer-motion";
 
 const MotionButton = motion(Button);
+const MotionBox = motion(Box);
 
 const Home = () => {
   const [view, setView] = useState("menu");
-  const [interacted, setInteracted] = useState(false); // marca si usuario interactuó
+  const [interacted, setInteracted] = useState(false); // para botón bounce
   const controls1 = useAnimation();
   const controls2 = useAnimation();
 
@@ -18,11 +19,9 @@ const Home = () => {
 
   const title = "Torneo Aztlán 2025";
 
-  // Configuración del "latido"
-  const pulseDuration = 8.2; // segundos por ciclo
-  const stagger = 0.06; // segundos entre letras
-
-  // keyframes del pulso: escala y sombra (usando emotion)
+  // Título pulse (emotion keyframes)
+  const pulseDuration = 8.2;
+  const stagger = 0.06;
   const pulse = useMemo(
     () => keyframes`
       0% {
@@ -31,7 +30,7 @@ const Home = () => {
       }
       45% {
         transform: scale(1.32);
-        text-shadow: 0 8px 19px gray, 0 2px 6px orange;
+        text-shadow: 0 8px 9px black, 0 2px 6px orange;
       }
       100% {
         transform: scale(1);
@@ -41,65 +40,53 @@ const Home = () => {
     []
   );
 
-  // Detecta preferencia de reduced-motion (segura con SSR)
-  const prefersReducedMotion =
-    typeof window !== "undefined" && window.matchMedia
-      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false;
+  // reduced-motion check
+  const shouldReduceMotion = useReducedMotion();
 
-  // Inicia la animación con framer-motion tras 3s sin interacción
+  // Bounce logic (igual que antes)
   useEffect(() => {
-    if (prefersReducedMotion) return; // no animar si el usuario lo pidió
+    if (shouldReduceMotion) return;
 
     let timer;
     let stopTimeout;
-
     if (view === "menu" && !interacted) {
       timer = setTimeout(() => {
-        // Inicio de la secuencia: cada control hará 3 saltos (repeat: 2 -> total 3 ejecuciones)
         controls1.start({
           y: [0, -8, 0],
           scale: [1, 1.02, 1],
           transition: { duration: 0.9, ease: "easeInOut", repeat: 2, repeatDelay: 0 },
         });
-
         controls2.start({
           y: [0, -8, 0],
           scale: [1, 1.02, 1],
           transition: { duration: 0.9, ease: "easeInOut", repeat: 2, repeatDelay: 0, delay: 0.18 },
         });
 
-        // Después de ~ (0.9 * 3) segundos + small buffer, forzamos stop y marcamos interacción para no re-trigger
         stopTimeout = setTimeout(() => {
           controls1.stop();
           controls2.stop();
-          setInteracted(true); // evitar que la animación vuelva a dispararse
+          setInteracted(true);
         }, (0.9 * 3) * 1000 + 250);
-      }, 2000);
+      }, 3000);
     }
-
     return () => {
       clearTimeout(timer);
       clearTimeout(stopTimeout);
     };
-  }, [view, interacted, controls1, controls2, prefersReducedMotion]);
+  }, [view, interacted, controls1, controls2, shouldReduceMotion]);
 
-  // Listeners para detectar interacción "real" (no mousemove)
+  // Detectar interacción "real"
   useEffect(() => {
     if (interacted) return;
-
     const stop = () => {
-      // Detenemos animaciones y marcamos que hubo interacción
       controls1.stop();
       controls2.stop();
       setInteracted(true);
     };
-
     window.addEventListener("scroll", stop, { passive: true });
     window.addEventListener("touchstart", stop, { passive: true });
     window.addEventListener("pointerdown", stop, { passive: true });
     window.addEventListener("keydown", stop, { passive: true });
-
     return () => {
       window.removeEventListener("scroll", stop);
       window.removeEventListener("touchstart", stop);
@@ -108,13 +95,21 @@ const Home = () => {
     };
   }, [interacted, controls1, controls2]);
 
-  // Click en botón: marca interacción, detiene animaciones y cambia vista
   const handleButtonClick = (nextView) => {
     controls1.stop();
     controls2.stop();
     setInteracted(true);
     handleViewChange(nextView);
   };
+
+  // Variants para los paneles (Form / UploadProof)
+  const panelVariants = {
+    hidden: { opacity: 0, y: 18, scale: 0.985 },
+    visible: { opacity: 1, y: 0, scale: 1 },
+    exit: { opacity: 0, y: -10, scale: 0.99 },
+  };
+
+  const panelTransition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] }; // suave
 
   return (
     <Box
@@ -158,14 +153,14 @@ const Home = () => {
           px: 2,
         }}
       >
-        {/* Título: accesible con aria-label, visualmente renderizado letra a letra */}
+        {/* Título: letra por letra con pulse */}
         <Typography
           variant="h3"
           component="h1"
           aria-label={title}
           sx={{
             mb: 4,
-            fontWeight: "700",
+            fontWeight: 700,
             fontFamily: '"League Spartan", "Roboto", sans-serif',
             fontSize: "3rem",
             display: "inline-block",
@@ -176,13 +171,10 @@ const Home = () => {
             {Array.from(title).map((char, i) => {
               const isSpace = char === " ";
               const delay = (i * stagger).toFixed(3) + "s";
-
               const letterSx = {
                 display: "inline-block",
                 transformOrigin: "center center",
-                animation: isSpace
-                  ? "none"
-                  : `${pulse} ${pulseDuration}s cubic-bezier(.4,.0,.2,1) ${delay} infinite`,
+                animation: isSpace ? "none" : `${pulse} ${pulseDuration}s cubic-bezier(.4,.0,.2,1) ${delay} infinite`,
                 willChange: "transform, text-shadow",
                 fontSize: { xs: "1.6rem", sm: "2rem", md: "3.5rem" },
                 marginRight: isSpace ? "0.45rem" : 0,
@@ -191,7 +183,6 @@ const Home = () => {
                 WebkitFontSmoothing: "antialiased",
                 MozOsxFontSmoothing: "grayscale",
               };
-
               return (
                 <Box component="span" key={`char-${i}-${char}`} aria-hidden="true" sx={letterSx}>
                   {char === " " ? "\u00A0" : char}
@@ -201,6 +192,7 @@ const Home = () => {
           </Box>
         </Typography>
 
+        {/* Menu */}
         {view === "menu" && (
           <Box sx={{ display: "flex", justifyContent: "center", gap: "2rem" }}>
             <MotionButton
@@ -214,8 +206,7 @@ const Home = () => {
                 borderRadius: "8px",
                 fontSize: "1rem",
                 boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-                // Respeta reduced-motion: no animar si user lo pidió
-                ...(prefersReducedMotion && { transform: "none" }),
+                ...(shouldReduceMotion && { transform: "none" }),
                 willChange: "transform",
               }}
             >
@@ -233,7 +224,7 @@ const Home = () => {
                 borderRadius: "8px",
                 fontSize: "1rem",
                 boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-                ...(prefersReducedMotion && { transform: "none" }),
+                ...(shouldReduceMotion && { transform: "none" }),
                 willChange: "transform",
               }}
             >
@@ -242,8 +233,46 @@ const Home = () => {
           </Box>
         )}
 
-        {view === "register" && <Form onBack={() => handleViewChange("menu")} />}
-        {view === "uploadProof" && <UploadProof onBack={() => handleViewChange("menu")} />}
+        {/* Aquí usamos AnimatePresence para que Form y UploadProof animen igual */}
+        <AnimatePresence mode="wait" initial={false}>
+          {view === "register" && (
+            <MotionBox
+              key="register-panel"
+              initial={shouldReduceMotion ? false : "hidden"}
+              animate={shouldReduceMotion ? false : "visible"}
+              exit={shouldReduceMotion ? false : "exit"}
+              variants={panelVariants}
+              transition={panelTransition}
+              sx={{
+                mt: 4,
+                width: "100%",
+                maxWidth: 760,
+                px: 2,
+              }}
+            >
+              <Form onBack={() => handleViewChange("menu")} />
+            </MotionBox>
+          )}
+
+          {view === "uploadProof" && (
+            <MotionBox
+              key="upload-panel"
+              initial={shouldReduceMotion ? false : "hidden"}
+              animate={shouldReduceMotion ? false : "visible"}
+              exit={shouldReduceMotion ? false : "exit"}
+              variants={panelVariants}
+              transition={panelTransition}
+              sx={{
+                mt: 4,
+                width: "100%",
+                maxWidth: 760,
+                px: 2,
+              }}
+            >
+              <UploadProof onBack={() => handleViewChange("menu")} />
+            </MotionBox>
+          )}
+        </AnimatePresence>
       </Box>
     </Box>
   );
