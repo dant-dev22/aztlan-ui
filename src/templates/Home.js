@@ -85,7 +85,7 @@ const Home = () => {
               variant="contained"
               sx={{
                 padding: "1rem 2rem",
-                backgroundColor: "#FFC107",
+                backgroundColor: "#1976D2", // azul que combina con el naranja
                 color: "white",
                 borderRadius: "8px",
                 fontSize: "1rem",
