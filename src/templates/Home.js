@@ -156,10 +156,10 @@ const Home = () => {
             component="h1"
             aria-label={title}
             sx={{
-              mb: 4,
+              mb: 0,
               fontWeight: 700,
               fontFamily: '"League Spartan", "Roboto", sans-serif',
-              fontSize: "3rem",
+              fontSize: view === "register" ? "0rem" : "1rem", // 👈 tamaño dinámico
               display: "inline-block",
               whiteSpace: "nowrap",
             }}
@@ -173,7 +173,10 @@ const Home = () => {
                   transformOrigin: "center center",
                   animation: isSpace ? "none" : `${pulse} ${pulseDuration}s cubic-bezier(.4,.0,.2,1) ${delay} infinite`,
                   willChange: "transform, text-shadow",
-                  fontSize: { xs: "1.6rem", sm: "2rem", md: "3.5rem" },
+                  fontSize: 
+                    view === "register"
+                        ? { xs: "1.2rem", sm: "1.4rem", md: "2rem" } // 👈 más pequeño en register
+                        : { xs: "1.6rem", sm: "2rem", md: "3.5rem" },
                   marginRight: isSpace ? "0.45rem" : 0,
                   fontFamily: '"League Spartan", "Roboto", sans-serif',
                   color: "white",

@@ -93,7 +93,6 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
         />
       </Grid>
 
-      {/* Experiencia */}
       <Grid item xs={12}>
         <Typography variant="subtitle1" gutterBottom sx={{ color: 'black' }}>
           ¿Cuánto llevas entrenando?

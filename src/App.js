@@ -12,7 +12,6 @@ function App() {
     <div className="App">
         <Navbar />
 
-      {/* Body de la aplicación */}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -20,7 +19,6 @@ function App() {
         </Routes>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

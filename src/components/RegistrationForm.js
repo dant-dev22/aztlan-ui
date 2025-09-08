@@ -38,14 +38,14 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
         padding: 2,
         border: "1px solid #ddd",
         borderRadius: 2,
-        backgroundColor: "#D6D6D6",
+        backgroundColor: "transparent",
         boxShadow: 2,
         opacity: isVisible ? 1 : 0,
         transition: "opacity 0.5s ease-in-out",
       }}
     >
-      <Typography variant="h6" align="center" gutterBottom sx={{ color: 'black' }}>
-        Registro y Participa
+      <Typography variant="h6" align="center" gutterBottom sx={{ color: 'white' }}>
+        Registrate y Participa
       </Typography>
 
       {error && (
