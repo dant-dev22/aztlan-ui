@@ -78,7 +78,7 @@ const Form = ({ onBack }) => {
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", textAlign: "center", marginTop: "0rem" }}>
       {loading ? (
-        <CircularProgress size={50} /> // Mostrar el spinner cuando esté cargando
+        <CircularProgress size={50} /> 
       ) : success ? ( 
         <SuccessForm
           aztlanID={aztlanID} onBack={onBack}

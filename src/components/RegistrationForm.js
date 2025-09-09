@@ -4,6 +4,7 @@ import FormFields from './FormFields';
 
 const inputStyles = {
   backgroundColor: "#F5F5F5", // Fondo blanco
+  color: "red",
   borderColor: "#4f4f4f", // Contorno naranja
   "& .MuiInputLabel-root": { color: "#4f4f4f" },
   "& .MuiOutlinedInput-root": {
@@ -44,7 +45,14 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
         transition: "opacity 0.5s ease-in-out",
       }}
     >
-      <Typography variant="h6" align="center" gutterBottom sx={{ color: 'white' }}>
+      <Typography variant="h6" align="center" gutterBottom sx={{
+          color: 'white',           // color del texto
+          backgroundColor: 'black', // fondo blanco
+          padding: 1,               // espacio dentro
+          borderRadius: 3,          // esquinas redondeadas opcional
+          marginBottom: 1,
+          display: 'inline-block',  // para que se ajuste al texto
+        }}>
         Registrate y Participa
       </Typography>
 
