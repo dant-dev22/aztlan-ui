@@ -20,7 +20,7 @@ const Home = () => {
   const title = "Torneo Aztlán 2025";
 
   // Pulse del título
-  const pulseDuration = 8.2;
+  const pulseDuration = 2.2;
   const stagger = 0.06;
   const pulse = useMemo(
     () => keyframes`
@@ -29,7 +29,7 @@ const Home = () => {
         text-shadow: 0 0 0 rgba(0,0,0,0);
       }
       45% {
-        transform: scale(1.15);
+        transform: scale(1.05);
         text-shadow:
           0 0.5rem 0.55rem black,  
           0 0.125rem 0.375rem orange;
@@ -185,10 +185,10 @@ const Home = () => {
                   fontSize: 
                     view === "register"
                         ? { xs: "2.0rem", sm: "1.4rem", md: "3rem" }
-                        : { xs: "2.0rem", sm: "2rem", md: "7rem" },
+                        : { xs: "2.0rem", sm: "2rem", md: "9rem" },
                   marginRight: isSpace ? "0.45rem" : 0,
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontStyle: "italic",
+                  fontWeight: "bold",
+                  fontFamily: "'Bebas Neue', sans-serif",
                   color: "white",
                   WebkitFontSmoothing: "antialiased",
                   MozOsxFontSmoothing: "grayscale",
