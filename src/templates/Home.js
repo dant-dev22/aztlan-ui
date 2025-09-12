@@ -24,9 +24,20 @@ const Home = () => {
   const stagger = 0.06;
   const pulse = useMemo(
     () => keyframes`
-      0% { transform: scale(1); text-shadow: 0 0 0 rgba(0,0,0,0); }
-      45% { transform: scale(1.32); text-shadow: 0 8px 9px black, 0 2px 6px orange; }
-      100% { transform: scale(1); text-shadow: 0 0 0 rgba(0,0,0,0); }
+      0% {
+        transform: scale(1);
+        text-shadow: 0 0 0 rgba(0,0,0,0);
+      }
+      45% {
+        transform: scale(1.15);
+        text-shadow:
+          0 0.5rem 0.55rem black,  
+          0 0.125rem 0.375rem orange;
+      }
+      100% {
+        transform: scale(1);
+        text-shadow: 0 0 0 rgba(0,0,0,0);
+      }
     `,
     []
   );
@@ -150,15 +161,13 @@ const Home = () => {
             minHeight: 320, // <- ajusta según tamaño del título + panel para evitar salto
           }}
         >
-          {/* Título */}
           <Typography
             variant="h3"
             component="h1"
             aria-label={title}
             sx={{
               mb: 0,
-              fontWeight: 700,
-              fontFamily: '"League Spartan", "Roboto", sans-serif',
+              fontWeight: "8rem",
               fontSize: view === "register" ? "0rem" : "1rem", // 👈 tamaño dinámico
               display: "inline-block",
               whiteSpace: "nowrap",
@@ -171,14 +180,15 @@ const Home = () => {
                 const letterSx = {
                   display: "inline-block",
                   transformOrigin: "center center",
-                  animation: isSpace ? "none" : `${pulse} ${pulseDuration}s cubic-bezier(.4,.0,.2,1) ${delay} infinite`,
+                  animation: isSpace ? "none" : `${pulse} ${pulseDuration}s cubic-bezier(.2,.1,.0,1) ${delay} infinite`,
                   willChange: "transform, text-shadow",
                   fontSize: 
                     view === "register"
-                        ? { xs: "1.2rem", sm: "1.4rem", md: "2rem" } // 👈 más pequeño en register
-                        : { xs: "1.6rem", sm: "2rem", md: "3.5rem" },
+                        ? { xs: "2.0rem", sm: "1.4rem", md: "3rem" }
+                        : { xs: "2.0rem", sm: "2rem", md: "7rem" },
                   marginRight: isSpace ? "0.45rem" : 0,
-                  fontFamily: '"League Spartan", "Roboto", sans-serif',
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontStyle: "italic",
                   color: "white",
                   WebkitFontSmoothing: "antialiased",
                   MozOsxFontSmoothing: "grayscale",
@@ -204,7 +214,9 @@ const Home = () => {
                   backgroundColor: "#FF5722",
                   color: "white",
                   borderRadius: "8px",
-                  fontSize: "1rem",
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontStyle: "light",
+                  fontSize: "1.0rem",  
                   boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
                   ...(shouldReduceMotion && { transform: "none" }),
                   willChange: "transform",
@@ -223,6 +235,9 @@ const Home = () => {
                   color: "white",
                   borderRadius: "8px",
                   fontSize: "1rem",
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontStyle: "light",
+                  fontSize: "1.0rem",  
                   boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
                   ...(shouldReduceMotion && { transform: "none" }),
                   willChange: "transform",

@@ -62,6 +62,27 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
           sx={inputStyles}
         />
       </Grid>
+      <Grid item xs={12}>
+        <FormControl fullWidth variant="outlined" sx={inputStyles}>
+          <InputLabel>Cinta</InputLabel>
+          <Select
+            name="belt"
+            value={formData.belt}
+            onChange={handleChange}
+            error={!!error?.belt}
+          >
+          <MenuItem value={"blanca"}>Blanca</MenuItem>
+          <MenuItem value={"azul"}>Azul</MenuItem>
+          <MenuItem value={"morada"}>Morada</MenuItem>
+          <MenuItem value={"cafe"}>Café</MenuItem>
+          <MenuItem value={"negra"}>Negra</MenuItem>
+          <MenuItem value={"gris"}>Gris</MenuItem>
+          <MenuItem value={"amarilla"}>Amarilla</MenuItem>
+          <MenuItem value={"naranja"}>Naranja</MenuItem>
+          <MenuItem value={"verde"}>Verde</MenuItem>  
+          </Select>
+        </FormControl>
+      </Grid>
 
       <Grid item xs={12}>
         <TextField
@@ -104,6 +125,9 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
           borderRadius: 3,          // esquinas redondeadas opcional
           marginBottom: 1,
           display: 'inline-block',  // para que se ajuste al texto
+          fontWeight: "bold",
+          fontSize: "1.4rem",
+          fontFamily: "'Bebas Neue', sans-serif",
         }}
       >
         ¿Cuánto llevas entrenando?
@@ -152,27 +176,7 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
         )}
       </Grid>
 
-      <Grid item xs={6}>
-        <FormControl fullWidth variant="outlined" sx={inputStyles}>
-          <InputLabel>Cinta</InputLabel>
-          <Select
-            name="belt"
-            value={formData.belt}
-            onChange={handleChange}
-            error={!!error?.belt}
-          >
-          <MenuItem value={"blanca"}>Blanca</MenuItem>
-          <MenuItem value={"azul"}>Azul</MenuItem>
-          <MenuItem value={"morada"}>Morada</MenuItem>
-          <MenuItem value={"cafe"}>Café</MenuItem>
-          <MenuItem value={"negra"}>Negra</MenuItem>
-          <MenuItem value={"gris"}>Gris</MenuItem>
-          <MenuItem value={"amarilla"}>Amarilla</MenuItem>
-          <MenuItem value={"naranja"}>Naranja</MenuItem>
-          <MenuItem value={"verde"}>Verde</MenuItem>  
-          </Select>
-        </FormControl>
-      </Grid>
+
     </Grid>
   );
 };

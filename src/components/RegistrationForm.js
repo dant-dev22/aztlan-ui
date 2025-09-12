@@ -47,12 +47,15 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
       }}
     >
       <Typography variant="h6" align="center" gutterBottom sx={{
-          color: 'white',           // color del texto
-          backgroundColor: 'black', // fondo blanco
-          padding: 1,               // espacio dentro
-          borderRadius: 3,          // esquinas redondeadas opcional
+          color: 'white',          
+          backgroundColor: 'black', 
+          padding: 1,               
+          borderRadius: 3,         
           marginBottom: 1,
-          display: 'inline-block',  // para que se ajuste al texto
+          fontWeight: "bold",
+          fontSize: "1.6rem",
+          fontFamily: "'Bebas Neue', sans-serif",
+          display: 'inline-block',  
         }}>
         Registrate y Participa
       </Typography>

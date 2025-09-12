@@ -88,8 +88,8 @@ const UploadProof = ({ onBack }) => {
           borderRadius: 3,
           boxShadow: 4,
           opacity: isVisible ? 1 : 0,
-          transition: "opacity 1s ease-in",
-          backgroundColor: "rgba(245, 245, 245, 0.7)",
+          transition: "opacity 0.5s ease-in",
+          backgroundColor: "rgba(245, 245, 245, 0.8)",
         }}
       >
         <CardContent sx={{ p: 4, textAlign: "center" }}>
@@ -99,9 +99,17 @@ const UploadProof = ({ onBack }) => {
             </Typography>
           ) : (
             <form onSubmit={handleSubmit}>
-              <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
-                Subir comprobante de pago
-              </Typography>
+              <h1
+                style={{
+                  marginBottom: "1rem",
+                  fontWeight: "bold",
+                  fontSize: "2rem",
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  textAlign: "center",
+                }}
+              >
+               Estás a un paso de terminar tu registro 
+              </h1>
 
               <Box sx={{ mb: 3 }}>
                 <TextField
@@ -113,26 +121,31 @@ const UploadProof = ({ onBack }) => {
                   sx={{
                     backgroundColor: "white",
                     borderRadius: 2,
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontStyle: "extra light",
+                    fontSize: "1.2rem",  
                   }}
                 />
               </Box>
               <Typography
-  variant="body1"
-  sx={{
-    mb: 2,
-    color: "#333",         // un poco más oscuro
-    lineHeight: 1.7,
-    fontSize: "1rem",      // más grande que body2
-  }}
->
-  El comprobante debe ser una imagen en formato <b>JPG o JPEG</b>,
-  y no mayor a <b>6MB</b>.
-  <br />
-  <br />
-  ¿No recuerdas tu Aztlan ID? Revisa tu correo (inbox/spam) con el
-  asunto <i>"Registro Aztlan Grappling"</i> o escríbenos a{" "}
-  <b>torneoaztlangrappling@gmail.com</b>.
-</Typography>
+                variant="body1"
+                sx={{
+                  mb: 2,
+                  color: "#333",         // un poco más oscuro
+                  lineHeight: 1.7,
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontStyle: "light",
+                  fontSize: "1.2rem",      // más grande que body2
+                }}
+              >
+                El comprobante debe ser una imagen en formato <b>JPG o JPEG</b>,
+                y no mayor a <b>6MB</b>.
+                <br />
+                <br />
+                ¿No recuerdas tu Aztlan ID? Revisa tu correo (inbox/spam) con el
+                asunto <i>"Registro Aztlan Grappling"</i> o escríbenos a{" "}
+                <b>torneoaztlangrappling@gmail.com</b>.
+              </Typography>
 
 
               <Box sx={{ mb: 2 }}>
@@ -145,7 +158,9 @@ const UploadProof = ({ onBack }) => {
                     py: 1.5,
                     border: "2px dashed #888",
                     borderRadius: 2,
-                    fontSize: "1rem",
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontStyle: "italic",
+                    fontSize: "1.3rem",
                     backgroundColor: "white",
                     fontWeight: "bold",
                     color: "#333",
@@ -155,7 +170,7 @@ const UploadProof = ({ onBack }) => {
                     },
                   }}
                 >
-                  Subir comprobante
+                  Subir comprobante de pago
                   <input
                     type="file"
                     id="proof"
@@ -212,7 +227,9 @@ const UploadProof = ({ onBack }) => {
                   sx={{
                     backgroundColor: "#FF5722",
                     px: 3,
-                    fontWeight: "bold",
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontStyle: "light",
+                    fontSize: "1.0rem",  
                     "&:hover": { backgroundColor: "#E64A19" },
                   }}
                 >
@@ -224,7 +241,9 @@ const UploadProof = ({ onBack }) => {
                   sx={{
                     backgroundColor: "#2196F3",
                     px: 3,
-                    fontWeight: "bold",
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontStyle: "light",
+                    fontSize: "1.0rem",  
                     "&:hover": { backgroundColor: "#1976D2" },
                   }}
                   onClick={onBack}
