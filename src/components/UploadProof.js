@@ -197,7 +197,7 @@ const UploadProof = ({ onBack }) => {
             <Button
               type="button"
               variant="contained"
-              sx={{ backgroundColor: "#FFC107" }}
+              sx={{ backgroundColor: "#2196F3" }}
               onClick={onBack}
             >
               Volver
