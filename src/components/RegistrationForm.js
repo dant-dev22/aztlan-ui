@@ -5,6 +5,7 @@ import FormFields from './FormFields';
 const inputStyles = {
   backgroundColor: "#F5F5F5", // Fondo blanco
   color: "red",
+  borderRadius: "1rem",
   borderColor: "#4f4f4f", // Contorno naranja
   "& .MuiInputLabel-root": { color: "#4f4f4f" },
   "& .MuiOutlinedInput-root": {
@@ -18,7 +19,7 @@ const inputStyles = {
 };
 
 const buttonStyles = {
-  backgroundColor: "#FFC107",
+  backgroundColor: "#2196F3",
 };
 
 const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack }) => {
