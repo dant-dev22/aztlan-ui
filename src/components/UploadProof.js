@@ -7,40 +7,43 @@ import {
   TextField,
   Box,
   Alert,
+  Card,
+  CardContent,
 } from "@mui/material";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 const UploadProof = ({ onBack }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [fileError, setFileError] = useState("");
-  const [isVisible, setIsVisible] = useState(false); // Nuevo estado para el fade-in
-  const [preview, setPreview] = useState(null); // Estado para la vista previa de la imagen
-  const [fileSize, setFileSize] = useState(null); // Estado para el tamaño de la imagen
+  const [isVisible, setIsVisible] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [fileSize, setFileSize] = useState(null);
 
   useEffect(() => {
-    setIsVisible(true); // Activar fade-in cuando el componente se monta
+    setIsVisible(true);
   }, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const validFormats = ["image/jpeg", "image/jpg"];
-      const maxSize = 6 * 1024 * 1024; // 6MB
+      const maxSize = 6 * 1024 * 1024;
 
       if (!validFormats.includes(file.type)) {
         setFileError("El archivo debe ser en formato JPG o JPEG.");
-        e.target.value = ""; // Reseteamos el input
-        setPreview(null); // Limpiar vista previa
-        setFileSize(null); // Limpiar tamaño
+        e.target.value = "";
+        setPreview(null);
+        setFileSize(null);
       } else if (file.size > maxSize) {
         setFileError("El archivo no puede ser mayor a 6MB.");
-        e.target.value = ""; // Reseteamos el input
-        setPreview(null); // Limpiar vista previa
-        setFileSize(null); // Limpiar tamaño
+        e.target.value = "";
+        setPreview(null);
+        setFileSize(null);
       } else {
-        setFileError(""); // Si todo está bien, limpiamos el error
-        setPreview(URL.createObjectURL(file)); // Crear URL para la vista previa
-        setFileSize((file.size / 1024 / 1024).toFixed(2)); // Calcular tamaño en MB
+        setFileError("");
+        setPreview(URL.createObjectURL(file));
+        setFileSize((file.size / 1024 / 1024).toFixed(2));
       }
     }
   };
@@ -67,11 +70,7 @@ const UploadProof = ({ onBack }) => {
       await axios.post(
         `${API_URL}/participants/${participantId}/payment-proof`,
         data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
       setIsSubmitted(true);
     } catch (error) {
@@ -83,128 +82,160 @@ const UploadProof = ({ onBack }) => {
   };
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        padding: "2rem",
-        textAlign: "center",
-        backgroundColor: "#D6D6D6",
-        opacity: isVisible ? 1 : 0, // Aparece lentamente
-        transition: "opacity 1s ease-in", // Transición de fade-in
-      }}
-    >
-      {isSubmitted ? (
-        <Typography variant="h6" sx={{ color: "green" }}>
-          Tu comprobante ha sido enviado
-        </Typography>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <Box sx={{ marginBottom: "1rem" }}>
-            <TextField
-              fullWidth
-              label="Aztlan ID"
-              name="id"
-              variant="outlined"
-              required
-              sx={{
-                backgroundColor: "white",
-                borderColor: "#595959",
-              }}
-            />
-          </Box>
-
-          <Box sx={{ marginBottom: "1rem", color: "black", fontSize: "1.0rem" }}>
-            <Typography>
-              El comprobante debe ser una imagen en formato JPG o JPEG, y no mayor a 6MB.
+    <Container maxWidth="sm" sx={{ mt: 4 }}>
+      <Card
+        sx={{
+          borderRadius: 3,
+          boxShadow: 4,
+          opacity: isVisible ? 1 : 0,
+          transition: "opacity 1s ease-in",
+          backgroundColor: "rgba(245, 245, 245, 0.7)",
+        }}
+      >
+        <CardContent sx={{ p: 4, textAlign: "center" }}>
+          {isSubmitted ? (
+            <Typography variant="h6" sx={{ color: "green", fontWeight: "bold" }}>
+              ✅ Tu comprobante ha sido enviado
             </Typography>
-            <Typography>
-              No recuerdas tu aztlan ID? Revisa en tu bandeja de entrada/spam un correo con el titulo "Registro Aztlan Grappling" contáctanos al correo torneoaztlangrappling@gmail.com.
-            </Typography>
-          </Box>
-
-          <Box sx={{ marginBottom: "1rem" }}>
-            <Button
-              variant="outlined"
-              component="label"
-              fullWidth
-              sx={{
-                padding: "0.75rem",
-                border: "2px dashed #ccc",
-                borderRadius: "8px",
-                textTransform: "none",
-                fontSize: "1rem",
-                backgroundColor: "#FFE0B2",
-                color: "#555",
-                '&:hover': {
-                  backgroundColor: "#FFCC80",
-                },
-              }}
-            >
-              Subir comprobante
-              <input
-                type="file"
-                id="proof"
-                name="proof"
-                accept=".jpg,.jpeg"
-                hidden
-                required
-                onChange={handleFileChange} // Añadir validación del archivo
-              />
-            </Button>
-            {fileError && (
-              <Alert severity="error" sx={{ marginTop: "1rem" }}>
-                {fileError}
-              </Alert>
-            )}
-          </Box>
-
-          {preview && (
-            <Box
-              sx={{
-                marginTop: "1rem",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <img
-                src={preview}
-                alt="Vista previa"
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "200px",
-                  marginBottom: "0.5rem",
-                  borderRadius: "8px",
-                  border: "1px solid #ccc",
-                }}
-              />
-              <Typography variant="body2" sx={{ color: "#555" }}>
-                Tamaño del archivo: {fileSize} MB
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
+                Subir comprobante de pago
               </Typography>
-            </Box>
-          )}
 
-          {errorMessage && (
-            <Alert severity="error" sx={{ marginBottom: "1rem" }}>
-              {errorMessage}
-            </Alert>
-          )}
+              <Box sx={{ mb: 3 }}>
+                <TextField
+                  fullWidth
+                  label="Aztlan ID"
+                  name="id"
+                  variant="outlined"
+                  required
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: 2,
+                  }}
+                />
+              </Box>
+              <Typography
+  variant="body1"
+  sx={{
+    mb: 2,
+    color: "#333",         // un poco más oscuro
+    lineHeight: 1.7,
+    fontSize: "1rem",      // más grande que body2
+  }}
+>
+  El comprobante debe ser una imagen en formato <b>JPG o JPEG</b>,
+  y no mayor a <b>6MB</b>.
+  <br />
+  <br />
+  ¿No recuerdas tu Aztlan ID? Revisa tu correo (inbox/spam) con el
+  asunto <i>"Registro Aztlan Grappling"</i> o escríbenos a{" "}
+  <b>torneoaztlangrappling@gmail.com</b>.
+</Typography>
 
-          <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-            <Button type="submit" variant="contained" sx={{ backgroundColor: "#FF5722" }}>
-              Enviar
-            </Button>
-            <Button
-              type="button"
-              variant="contained"
-              sx={{ backgroundColor: "#2196F3" }}
-              onClick={onBack}
-            >
-              Volver
-            </Button>
-          </Box>
-        </form>
-      )}
+
+              <Box sx={{ mb: 2 }}>
+                <Button
+                  variant="outlined"
+                  component="label"
+                  fullWidth
+                  startIcon={<UploadFileIcon />}
+                  sx={{
+                    py: 1.5,
+                    border: "2px dashed #888",
+                    borderRadius: 2,
+                    fontSize: "1rem",
+                    backgroundColor: "white",
+                    fontWeight: "bold",
+                    color: "#333",
+                    "&:hover": {
+                      backgroundColor: "#FFCC80",
+                      borderColor: "#FF9800",
+                    },
+                  }}
+                >
+                  Subir comprobante
+                  <input
+                    type="file"
+                    id="proof"
+                    name="proof"
+                    accept=".jpg,.jpeg"
+                    hidden
+                    required
+                    onChange={handleFileChange}
+                  />
+                </Button>
+                {fileError && (
+                  <Alert severity="error" sx={{ mt: 2 }}>
+                    {fileError}
+                  </Alert>
+                )}
+              </Box>
+
+              {preview && (
+                <Box
+                  sx={{
+                    mt: 2,
+                    p: 2,
+                    borderRadius: 2,
+                    boxShadow: 2,
+                    backgroundColor: "white",
+                  }}
+                >
+                  <img
+                    src={preview}
+                    alt="Vista previa"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "200px",
+                      borderRadius: "8px",
+                      marginBottom: "0.5rem",
+                    }}
+                  />
+                  <Typography variant="body2" sx={{ color: "#666" }}>
+                    Tamaño del archivo: {fileSize} MB
+                  </Typography>
+                </Box>
+              )}
+
+              {errorMessage && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  {errorMessage}
+                </Alert>
+              )}
+
+              <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#FF5722",
+                    px: 3,
+                    fontWeight: "bold",
+                    "&:hover": { backgroundColor: "#E64A19" },
+                  }}
+                >
+                  Enviar
+                </Button>
+                <Button
+                  type="button"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#2196F3",
+                    px: 3,
+                    fontWeight: "bold",
+                    "&:hover": { backgroundColor: "#1976D2" },
+                  }}
+                  onClick={onBack}
+                >
+                  Volver
+                </Button>
+              </Box>
+            </form>
+          )}
+        </CardContent>
+      </Card>
     </Container>
   );
 };
