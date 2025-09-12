@@ -39,7 +39,7 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
         padding: 2,
         border: "1px solid #ddd",
         borderRadius: 2,
-        backgroundColor: "transparent",
+        backgroundColor: "rgba(128, 128, 128, 0.6)",
         boxShadow: 2,
         opacity: isVisible ? 1 : 0,
         transition: "opacity 0.5s ease-in-out",
