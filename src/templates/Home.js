@@ -167,9 +167,8 @@ const Home = () => {
             aria-label={title}
             sx={{
               mb: 0,
-              fontWeight: "8rem",
               fontSize: view === "register" ? "0rem" : "1rem", // 👈 tamaño dinámico
-              display: "inline-block",
+              display: view === "register" ? "none": "inline-block",
               whiteSpace: "nowrap",
             }}
           >
@@ -237,7 +236,6 @@ const Home = () => {
                   fontSize: "1rem",
                   fontFamily: "'Montserrat', sans-serif",
                   fontStyle: "light",
-                  fontSize: "1.0rem",  
                   boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
                   ...(shouldReduceMotion && { transform: "none" }),
                   willChange: "transform",

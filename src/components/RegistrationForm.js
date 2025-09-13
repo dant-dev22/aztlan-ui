@@ -59,25 +59,6 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
         transition: "opacity 0.5s ease-in-out",
       }}
     >
-      <Typography
-        variant="h6"
-        align="center"
-        gutterBottom
-        sx={{
-          color: "white",
-          backgroundColor: "black",
-          padding: 1,
-          borderRadius: 3,
-          marginBottom: 1,
-          fontWeight: "bold",
-          fontSize: "1.6rem",
-          fontFamily: "'Bebas Neue', sans-serif",
-          display: "inline-block",
-        }}
-      >
-        Registrate y Participa
-      </Typography>
-
       {error && (
         <Typography color="error" variant="body2" align="center" gutterBottom>
           {error}
@@ -86,7 +67,7 @@ const RegistrationForm = ({ formData, handleChange, error, handleSubmit, onBack 
 
       <FormFields formData={formData} handleChange={handleChange} error={error} inputStyles={inputStyles} />
 
-      <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem", marginTop: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem", marginTop: 3 }}>
         <Button
           type="submit"
           variant="contained"

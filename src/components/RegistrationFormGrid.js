@@ -115,23 +115,7 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
       </Grid>
 
       <Grid item xs={12}>
-      <Typography
-        variant="subtitle1"
-        gutterBottom
-        sx={{
-          color: 'white',           // color del texto
-          backgroundColor: 'black', // fondo blanco
-          padding: 1,               // espacio dentro
-          borderRadius: 3,          // esquinas redondeadas opcional
-          marginBottom: 1,
-          display: 'inline-block',  // para que se ajuste al texto
-          fontWeight: "bold",
-          fontSize: "1.4rem",
-          fontFamily: "'Bebas Neue', sans-serif",
-        }}
-      >
-        ¿Cuánto llevas entrenando?
-      </Typography>
+
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <TextField

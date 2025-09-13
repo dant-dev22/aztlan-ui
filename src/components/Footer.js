@@ -9,11 +9,11 @@ const Footer = () => {
   return (
     <Box
       sx={{
-        position: "fixed",
         bottom: 0,
         left: 0,
         width: "100%",
-        backgroundColor: "transparent", // Fondo transparente
+        marginTop: "1rem",
+        backgroundColor: "gray", // Fondo transparente
         color: "white", // Texto blanco para contraste
         padding: "1rem 0",
         display: "flex",

@@ -5,7 +5,6 @@ import { AppBar, Toolbar, Box, Typography } from "@mui/material";
 const Navbar = () => {
   return (
     <AppBar
-      position="fixed" // fijo sobre la ventana
       elevation={0} // quita sombra
       sx={{
         top: 0,
@@ -13,7 +12,6 @@ const Navbar = () => {
         width: "100%",
         backgroundColor: "transparent", // fondo transparente
         boxShadow: "none",
-        zIndex: 1000, // encima de todo
       }}
     >
       <Toolbar
