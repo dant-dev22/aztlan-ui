@@ -132,7 +132,7 @@ const UploadProof = ({ onBack }) => {
                 sx={{
                   mb: 2,
                   color: "#333",         // un poco más oscuro
-                  lineHeight: 1.7,
+                  lineHeight: 0.8,
                   fontFamily: "'Montserrat', sans-serif",
                   fontStyle: "light",
                   fontSize: "1.2rem",      // más grande que body2
@@ -160,7 +160,7 @@ const UploadProof = ({ onBack }) => {
                     borderRadius: 2,
                     fontFamily: "'Montserrat', sans-serif",
                     fontStyle: "italic",
-                    fontSize: "1.3rem",
+                    fontSize: "1.0rem",
                     backgroundColor: "white",
                     fontWeight: "bold",
                     color: "#333",
@@ -202,10 +202,9 @@ const UploadProof = ({ onBack }) => {
                     src={preview}
                     alt="Vista previa"
                     style={{
-                      maxWidth: "100%",
-                      maxHeight: "200px",
+                      maxWidth: "5rem",
+                      maxHeight: "5rem",
                       borderRadius: "8px",
-                      marginBottom: "0.5rem",
                     }}
                   />
                   <Typography variant="body2" sx={{ color: "#666" }}>

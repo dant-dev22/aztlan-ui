@@ -41,7 +41,7 @@ const ParticipantsTable = ({ participants, setParticipants }) => {
 
   const updatePaymentStatus = async (aztlanId, isPaymentComplete) => {
     try {
-      const response = await axios.put(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${aztlanId}/payment-status/${isPaymentComplete}`);
+      const response = await axios.put(`https://vjfpbq4jbiz5uyarfu7z7ahlhi0xbhmi.lambda-url.us-east-1.on.aws/participants/${aztlanId}/payment/${isPaymentComplete}`);
       if (response.status === 200) {
         setParticipants((prevParticipants) =>
           prevParticipants.map((p) =>
