@@ -173,15 +173,12 @@ function AdminAztlan() {
                 IconComponent={ArrowDropDownIcon}
               >
                 <MenuItem value="" disabled>Selecciona un filtro</MenuItem>
-                <MenuItem value={"blanca"}>Blanca</MenuItem>
-                <MenuItem value={"azul"}>Azul</MenuItem>
-                <MenuItem value={"morada"}>Morada</MenuItem>
-                <MenuItem value={"cafe"}>Café</MenuItem>
-                <MenuItem value={"negra"}>Negra</MenuItem>
-                <MenuItem value={"gris"}>Gris</MenuItem>
-                <MenuItem value={"amarilla"}>Amarilla</MenuItem>
-                <MenuItem value={"naranja"}>Naranja</MenuItem>
-                <MenuItem value={"verde"}>Verde</MenuItem>
+                <MenuItem value={"inf-1"}>Infantil 1(6-9 años)</MenuItem>
+                <MenuItem value={"inf-2"}>Infantil 2(10-12 años)</MenuItem>
+                <MenuItem value={"ado"}>Adolescentes(13-15 años)</MenuItem>
+                <MenuItem value={"juve"}>Juvenil(16-17 años)</MenuItem>
+                <MenuItem value={"adul"}>Adultos(18-34 años)</MenuItem>
+                <MenuItem value={"mast"}>Masters +35 años</MenuItem>
                 <MenuItem value={"todos"}>Todos</MenuItem>
               </Select>
             </DialogContent>

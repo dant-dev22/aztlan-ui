@@ -27,12 +27,41 @@ const filterParticipantsByBelt = (participants, filter) => {
   return participants.filter(participant => participant.belt === filter);
 };
 
+// Función para filtrar participantes según el grupo de edad seleccionado
+const filterParticipantsByAgeGroup = (participants, filter) => {
+  if (filter === "todos") {
+    return participants;
+  }
+
+  return participants.filter(participant => {
+    const age = calculateAge(participant.birth_date);
+
+    switch (filter) {
+      case "inf-1":
+        return age >= 6 && age <= 9;
+      case "inf-2":
+        return age >= 10 && age <= 12;
+      case "ado":
+        return age >= 13 && age <= 15;
+      case "juve":
+        return age >= 16 && age <= 17;
+      case "adul":
+        return age >= 18 && age <= 34;
+      case "mast":
+        return age >= 35;
+      default:
+        return true;
+    }
+  });
+};
+
+
 // Generar CSV con participantes filtrados por cinta
 export const generateCSV = (participants, filter) => {
   const headers = "ID,Peso,Nombre,Tiempo entrenando,Cinta,Academia,Edad,Payment Complete";
 
   // Filtrar participantes según la cinta seleccionada
-  const filteredParticipants = filterParticipantsByBelt(participants, filter);
+  const filteredParticipants = filterParticipantsByAgeGroup(participants, filter);
 
   return [
     headers,
