@@ -62,6 +62,7 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
           sx={inputStyles}
         />
       </Grid>
+
       <Grid item xs={12}>
         <FormControl fullWidth variant="outlined" sx={inputStyles}>
           <InputLabel>Cinta</InputLabel>
@@ -71,15 +72,15 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
             onChange={handleChange}
             error={!!error?.belt}
           >
-          <MenuItem value={"blanca"}>Blanca</MenuItem>
-          <MenuItem value={"azul"}>Azul</MenuItem>
-          <MenuItem value={"morada"}>Morada</MenuItem>
-          <MenuItem value={"cafe"}>Café</MenuItem>
-          <MenuItem value={"negra"}>Negra</MenuItem>
-          <MenuItem value={"gris"}>Gris</MenuItem>
-          <MenuItem value={"amarilla"}>Amarilla</MenuItem>
-          <MenuItem value={"naranja"}>Naranja</MenuItem>
-          <MenuItem value={"verde"}>Verde</MenuItem>  
+            <MenuItem value={"blanca"}>Blanca</MenuItem>
+            <MenuItem value={"azul"}>Azul</MenuItem>
+            <MenuItem value={"morada"}>Morada</MenuItem>
+            <MenuItem value={"cafe"}>Café</MenuItem>
+            <MenuItem value={"negra"}>Negra</MenuItem>
+            <MenuItem value={"gris"}>Gris</MenuItem>
+            <MenuItem value={"amarilla"}>Amarilla</MenuItem>
+            <MenuItem value={"naranja"}>Naranja</MenuItem>
+            <MenuItem value={"verde"}>Verde</MenuItem>  
           </Select>
         </FormControl>
       </Grid>
@@ -115,9 +116,20 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
       </Grid>
 
       <Grid item xs={12}>
+        {/* Título agregado */}
+        <Typography
+          variant="subtitle1"
+          sx={{
+            mb: 1,
+            fontWeight: 'bold',
+            textAlign: 'center'
+          }}
+        >
+          ¿Cuánto tiempo llevas entrenando?
+        </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Años"
@@ -134,7 +146,7 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
               sx={inputStyles}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Meses"
@@ -159,8 +171,6 @@ const FormGrid = ({ formData, error, handleChange, inputStyles }) => {
           </Typography>
         )}
       </Grid>
-
-
     </Grid>
   );
 };
