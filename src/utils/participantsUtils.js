@@ -21,11 +21,16 @@ export const handleSearchChange = (searchQuery, participants, setFilteredPartici
   if (searchQuery === "") {
     setFilteredParticipants(participants);
   } else {
-    const filtered = participants.filter(participant =>
-      participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      participant.academy.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      participant.category.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filtered = participants.filter(participant => {
+      // Tomamos solo los campos que queremos buscar
+      const fieldsToSearch = ['name', 'academy', 'category'];
+      
+      // Comprobamos si alguno de esos campos contiene la búsqueda
+      return fieldsToSearch.some(field => 
+        (participant[field]?.toLowerCase() || "").includes(searchQuery.toLowerCase())
+      );
+    });
+    
     setFilteredParticipants(filtered);
   }
 };
